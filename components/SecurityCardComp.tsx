@@ -2,15 +2,18 @@
 import React, { useState, useEffect } from 'react';
 import { SecurityCard, RiskLevel } from '../types';
 import { generateCardImage, generateThreatIntelligence } from '../services/geminiService';
+import { marked } from 'marked';
 
 interface Props {
   card: SecurityCard;
   onAccept: () => void;
   onPass: () => void;
   onSkip: () => void;
-  onExit: () => void; // Nova prop para voltar ao lobby
+  onExit: () => void;
   isFirst: boolean;
 }
+
+const DEFAULT_CARD_IMAGE = 'https://images.unsplash.com/photo-1599727297459-70ed96f53bb1?q=80&w=600&fit=crop';
 
 const SecurityCardComp: React.FC<Props> = ({ card, onAccept, onPass, onSkip, onExit, isFirst }) => {
   const [isFlipped, setIsFlipped] = useState(false);
@@ -47,9 +50,14 @@ const SecurityCardComp: React.FC<Props> = ({ card, onAccept, onPass, onSkip, onE
     setShowIntel(true);
     if (!intelContent) {
       setIsIntelLoading(true);
-      const intel = await generateThreatIntelligence(card);
-      setIntelContent(intel);
-      setIsIntelLoading(false);
+      try {
+        const intel = await generateThreatIntelligence(card);
+        setIntelContent(intel);
+      } catch (error) {
+        setIntelContent("As estrelas estão nubladas. Consulte os arquivos locais na descrição da carta.");
+      } finally {
+        setIsIntelLoading(false);
+      }
     }
   };
 
@@ -62,9 +70,8 @@ const SecurityCardComp: React.FC<Props> = ({ card, onAccept, onPass, onSkip, onE
     }
   };
 
-  const displayImage = card.image || generatedImg;
+  const displayImage = card.image || generatedImg || DEFAULT_CARD_IMAGE;
 
-  // Botão comum de saída para reuso
   const ExitButton = () => (
     <button 
       onClick={(e) => { e.stopPropagation(); onExit(); }}
@@ -84,7 +91,7 @@ const SecurityCardComp: React.FC<Props> = ({ card, onAccept, onPass, onSkip, onE
         <div 
           className={`flip-card-inner relative w-full h-full transition-transform duration-700 ease-out ${isFlipped ? 'rotate-y-180' : ''}`}
         >
-          {/* LADO FRONTAL: ARTEFATO DE PEDRA E OURO */}
+          {/* LADO FRONTAL */}
           <div 
             style={{ backfaceVisibility: 'hidden', zIndex: isFlipped ? 0 : 20 }}
             className="absolute inset-0 bg-black border-[12px] border-[#1a0f0a] rounded-[2.5rem] shadow-2xl p-6 flex flex-col justify-between overflow-hidden ring-1 ring-[#b7950b]/30"
@@ -101,7 +108,7 @@ const SecurityCardComp: React.FC<Props> = ({ card, onAccept, onPass, onSkip, onE
                  </div>
               </div>
 
-              <h3 className="text-2xl font-bold text-[#f4e4bc] medieval-font tracking-widest text-center mb-6 uppercase gold-glow">
+              <h3 className="text-2xl font-bold text-[#f4e4bc] medieval-font tracking-widest text-center mb-6 uppercase gold-glow leading-tight">
                 {card.title}
               </h3>
               
@@ -109,18 +116,14 @@ const SecurityCardComp: React.FC<Props> = ({ card, onAccept, onPass, onSkip, onE
                 {isGenerating ? (
                   <div className="absolute inset-0 flex flex-col items-center justify-center gap-4">
                     <i className="fas fa-magic text-[#b7950b] text-3xl animate-spin"></i>
-                    <span className="text-[9px] text-[#b7950b] font-bold uppercase tracking-widest">Invocando Imagem...</span>
+                    <span className="text-[9px] text-[#b7950b] font-bold uppercase tracking-widest">Invocando...</span>
                   </div>
-                ) : displayImage ? (
+                ) : (
                   <img 
                     src={displayImage} 
                     alt={card.title} 
                     className="w-full h-full object-cover brightness-[0.7] contrast-[1.2] grayscale-[0.2]" 
                   />
-                ) : (
-                  <div className="w-full h-full flex items-center justify-center text-[#2c1810] opacity-30">
-                    <i className="fas fa-mountain-city text-6xl"></i>
-                  </div>
                 )}
                 <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-60"></div>
               </div>
@@ -144,7 +147,7 @@ const SecurityCardComp: React.FC<Props> = ({ card, onAccept, onPass, onSkip, onE
             </div>
           </div>
 
-          {/* LADO TRASEIRO: PERGAMINHO ANTIGO COM BOTÃO DE MAGO */}
+          {/* LADO TRASEIRO */}
           <div 
             style={{ 
               backfaceVisibility: 'hidden', 
@@ -160,7 +163,6 @@ const SecurityCardComp: React.FC<Props> = ({ card, onAccept, onPass, onSkip, onE
             <div className="relative z-10 flex flex-col h-full">
               <div className="flex items-center justify-between mb-6 pb-4 border-b border-[#1a0f0a]/10 pl-8">
                 <h4 className="text-lg font-bold uppercase text-[#1a0f0a] medieval-font tracking-widest">O Manuscrito</h4>
-                {/* BOTÃO DO MAGO */}
                 <button 
                   onClick={handleMageClick}
                   className="w-10 h-10 rounded-full bg-[#1a0f0a] text-[#b7950b] flex items-center justify-center hover:scale-110 transition-transform shadow-lg group/mage"
@@ -188,88 +190,46 @@ const SecurityCardComp: React.FC<Props> = ({ card, onAccept, onPass, onSkip, onE
 
                 {card.reference && (
                   <div className="pt-4 border-t border-[#1a0f0a]/5">
-                     <div className="text-[8px] font-bold text-[#8d6e63] uppercase tracking-[0.2em] mb-1">Tratado de Segurança:</div>
-                     <a 
-                      href={card.referenceUrl} 
-                      target="_blank" 
-                      rel="noopener noreferrer"
-                      className="text-[10px] text-blue-900 font-bold underline flex items-center gap-2"
-                      onClick={(e) => e.stopPropagation()}
-                     >
+                     <div className="text-[8px] font-bold text-[#8d6e63] uppercase tracking-[0.2em] mb-1">Tratado:</div>
+                     <a href={card.referenceUrl} target="_blank" rel="noopener noreferrer" className="text-[10px] text-blue-900 font-bold underline flex items-center gap-2">
                        {card.reference} <i className="fas fa-external-link-alt text-[8px]"></i>
                      </a>
                   </div>
                 )}
               </div>
 
-              {/* BOTÕES DE AÇÃO: IGNORAR, PULAR, COMBATER */}
               <div className="mt-8 grid grid-cols-3 gap-2 pt-4 border-t border-[#1a0f0a]/5">
-                 <button 
-                   onClick={(e) => { e.stopPropagation(); onPass(); }}
-                   className="py-4 bg-[#8d6e63] hover:bg-[#5d4037] text-white rounded-xl text-[9px] font-bold uppercase tracking-[0.1em] transition-all shadow-md active:scale-95"
-                   title="Descartar esta ameaça"
-                 >
-                   Ignorar
-                 </button>
-                 <button 
-                   onClick={(e) => { e.stopPropagation(); onSkip(); }}
-                   className="py-4 bg-[#455a64] hover:bg-[#263238] text-white rounded-xl text-[9px] font-bold uppercase tracking-[0.1em] transition-all shadow-md active:scale-95 flex items-center justify-center gap-1"
-                   title="Ver mais tarde"
-                 >
-                   <i className="fas fa-rotate text-[10px]"></i> Pular
-                 </button>
-                 <button 
-                   onClick={(e) => { e.stopPropagation(); onAccept(); }}
-                   className="py-4 bg-[#b7950b] hover:bg-[#9a7d0a] text-black rounded-xl text-[9px] font-bold uppercase tracking-[0.1em] transition-all shadow-lg active:scale-95"
-                   title="Adicionar ao backlog"
-                 >
-                   Combater
-                 </button>
+                 <button onClick={(e) => { e.stopPropagation(); onPass(); }} className="py-4 bg-[#8d6e63] hover:bg-[#5d4037] text-white rounded-xl text-[9px] font-bold uppercase tracking-[0.1em] transition-all shadow-md active:scale-95">Ignorar</button>
+                 <button onClick={(e) => { e.stopPropagation(); onSkip(); }} className="py-4 bg-[#455a64] hover:bg-[#263238] text-white rounded-xl text-[9px] font-bold uppercase tracking-[0.1em] transition-all shadow-md active:scale-95 flex items-center justify-center gap-1"><i className="fas fa-rotate text-[10px]"></i> Pular</button>
+                 <button onClick={(e) => { e.stopPropagation(); onAccept(); }} className="py-4 bg-[#b7950b] hover:bg-[#9a7d0a] text-black rounded-xl text-[9px] font-bold uppercase tracking-[0.1em] transition-all shadow-lg active:scale-95">Combater</button>
               </div>
             </div>
           </div>
         </div>
       </div>
 
-      {/* MODAL DO PERGAMINHO DE INTELIGÊNCIA */}
+      {/* MODAL DO PERGAMINHO */}
       {showIntel && (
         <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-fadeIn">
           <div className="relative parchment max-w-2xl w-full max-h-[80vh] overflow-hidden rounded-[2rem] border-[12px] border-[#1a0f0a] shadow-2xl flex flex-col">
-            <button 
-              onClick={() => setShowIntel(false)}
-              className="absolute top-4 right-4 text-[#1a0f0a] hover:scale-125 transition-transform"
-            >
-              <i className="fas fa-times text-2xl"></i>
-            </button>
-            
+            <button onClick={() => setShowIntel(false)} className="absolute top-4 right-4 text-[#1a0f0a] hover:scale-125 transition-transform"><i className="fas fa-times text-2xl"></i></button>
             <div className="p-12 overflow-y-auto custom-scrollbar">
               <div className="text-center mb-8">
                 <i className="fas fa-scroll text-4xl text-[#1a0f0a] mb-4"></i>
-                <h3 className="text-2xl font-bold medieval-font uppercase tracking-widest border-b-2 border-[#1a0f0a]/20 pb-4">
-                  Inteligência Arcana: {card.title}
-                </h3>
+                <h3 className="text-2xl font-bold medieval-font uppercase tracking-widest border-b-2 border-[#1a0f0a]/20 pb-4">Inteligência Arcana</h3>
               </div>
-              
-              <div className="space-y-6 text-[#1a0f0a] font-serif leading-relaxed text-base italic">
+              <div className="space-y-6 text-[#1a0f0a] font-serif leading-relaxed text-base italic markdown-content">
                 {isIntelLoading ? (
                   <div className="flex flex-col items-center justify-center py-20 gap-4">
                     <i className="fas fa-hat-wizard text-5xl animate-bounce"></i>
                     <p className="medieval-font uppercase tracking-widest text-sm">O Mago está consultando os cosmos...</p>
                   </div>
                 ) : (
-                  <div className="whitespace-pre-wrap">
-                    {intelContent}
-                  </div>
+                  <div dangerouslySetInnerHTML={{ __html: intelContent ? marked.parse(intelContent) : '' }} />
                 )}
               </div>
-              
               <div className="mt-12 pt-8 border-t border-[#1a0f0a]/20 text-center">
-                <button 
-                  onClick={() => setShowIntel(false)}
-                  className="px-8 py-3 bg-[#1a0f0a] text-[#d4c3a1] rounded-full font-bold uppercase tracking-widest text-xs hover:bg-black transition-colors"
-                >
-                  Fechar Pergaminho
-                </button>
+                <button onClick={() => setShowIntel(false)} className="px-8 py-3 bg-[#1a0f0a] text-[#d4c3a1] rounded-full font-bold uppercase tracking-widest text-xs hover:bg-black transition-colors">Fechar Pergaminho</button>
               </div>
             </div>
           </div>

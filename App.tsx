@@ -6,6 +6,7 @@ import SecurityCardComp from './components/SecurityCardComp';
 import RiskMeter from './components/RiskMeter';
 import { generateSecuritySummary } from './services/geminiService';
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip } from 'recharts';
+import { marked } from 'marked';
 
 const App: React.FC = () => {
   const [gameState, setGameState] = useState<GameState>('LOBBY');
@@ -25,23 +26,21 @@ const App: React.FC = () => {
     setAiSummary(null);
   };
 
-  const handleHiddenThreats = () => {
-    // Coleta todas as cartas de todos os decks
+  const handleKingsTreasure = () => {
     const allCards = allDecks.flatMap(deck => deck.cards);
-    // Embaralha e pega apenas 3
-    const randomThree = [...allCards]
+    const randomFive = [...allCards]
       .sort(() => Math.random() - 0.5)
-      .slice(0, 3);
+      .slice(0, 5);
     
     setSelectedDeck({
-      id: 'hidden-threats',
+      id: 'kings-treasure',
       name: 'Ameaças Ocultas',
-      icon: 'fa-skull',
-      description: 'Uma incursão perigosa pelas sombras do reino, revelando segredos que nunca deveriam ter sido encontrados.',
-      cards: randomThree
+      icon: 'fa-ghost',
+      description: 'Uma incursão estratégica pelas sombras do reino, onde o invisível se torna real e o silêncio é o aviso.',
+      cards: randomFive
     });
     
-    setCurrentCards(randomThree);
+    setCurrentCards(randomFive);
     setGameState('PLAYING');
     setBacklog([]);
     setAiSummary(null);
@@ -125,29 +124,35 @@ const App: React.FC = () => {
               </p>
             </div>
 
-            {/* SEÇÃO: AMEAÇAS OCULTAS (CAVEIRA) */}
-            <div className="flex flex-col items-center py-8">
+            {/* SEÇÃO: AMEAÇAS OCULTAS (GHOST CHALLENGE) */}
+            <div className="flex flex-col items-center py-16">
                <button 
-                 onClick={handleHiddenThreats}
+                 onClick={handleKingsTreasure}
                  className="group relative flex flex-col items-center focus:outline-none"
                >
-                 <div className="absolute -inset-8 bg-red-900/20 blur-3xl rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-700 animate-pulse"></div>
-                 <div className="relative w-40 h-40 bg-gradient-to-b from-[#1a0f0a] to-[#050505] rounded-3xl flex items-center justify-center shadow-[0_0_50px_rgba(183,149,11,0.2)] border-2 border-[#b7950b]/40 transform group-hover:scale-110 group-active:scale-95 transition-all duration-300 overflow-hidden">
-                    <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/black-linen.png')] opacity-20"></div>
-                    <i className="fas fa-skull-crossbones text-[#b7950b] text-7xl group-hover:hidden transition-all"></i>
-                    <i className="fas fa-skull text-red-600 text-7xl hidden group-hover:block transition-all animate-pulse"></i>
-                    {/* Partículas de sombras */}
-                    <div className="absolute top-2 right-2 w-2 h-2 bg-red-500 rounded-full animate-ping opacity-60"></div>
-                    <div className="absolute bottom-4 left-6 w-1 h-1 bg-red-500 rounded-full animate-ping opacity-40 delay-300"></div>
+                 {/* Aura Arcana */}
+                 <div className="absolute -inset-20 bg-[#b7950b]/10 blur-[100px] rounded-full opacity-60 group-hover:opacity-100 transition-opacity duration-1000 animate-pulse"></div>
+                 
+                 {/* Ícone do Fantasma */}
+                 <div className="relative w-48 h-48 flex items-center justify-center transition-transform duration-700 group-hover:scale-110">
+                    <div className="absolute inset-0 bg-gradient-to-t from-[#b7950b]/5 to-transparent rounded-full border border-[#b7950b]/10 scale-150 opacity-50"></div>
+                    
+                    <i className="fas fa-ghost text-8xl md:text-9xl text-[#f4e4bc] drop-shadow-[0_0_35px_rgba(183,149,11,0.9)] group-hover:text-white transition-all duration-500 animate-[bounce_3s_infinite]"></i>
+                    
+                    <div className="absolute inset-0 z-0">
+                       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[2px] h-12 bg-gradient-to-t from-[#b7950b] to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                    </div>
                  </div>
-                 <div className="mt-6 space-y-2">
-                    <h3 className="text-2xl font-bold text-[#b7950b] medieval-font gold-glow uppercase tracking-widest">Ameaças Ocultas</h3>
-                    <p className="text-[10px] font-bold text-[#f4e4bc]/60 uppercase tracking-[0.3em]">3 Desafios Aleatórios das Sombras</p>
+
+                 <div className="mt-12 space-y-3 relative">
+                    <div className="absolute -top-6 left-1/2 -translate-x-1/2 w-20 h-[1px] bg-gradient-to-r from-transparent via-[#b7950b] to-transparent opacity-40 group-hover:w-40 transition-all duration-700"></div>
+                    <h3 className="text-4xl font-bold text-[#f4e4bc] medieval-font gold-glow uppercase tracking-[0.3em] group-hover:text-white transition-colors">Ameaças Ocultas</h3>
+                    <p className="text-[12px] font-bold text-[#b7950b] uppercase tracking-[0.5em] opacity-80">Desafie os perigos invisíveis do reino</p>
                  </div>
                </button>
             </div>
 
-            <div className="divider-gold w-3/4 mx-auto opacity-20"></div>
+            <div className="divider-gold w-3/4 mx-auto opacity-20 my-12"></div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12 mt-12 px-4">
               {allDecks.map((deck) => (
@@ -163,7 +168,7 @@ const App: React.FC = () => {
 
                     <div className="relative z-10 flex flex-col h-full w-full p-8 items-center justify-between">
                       <div className="text-center">
-                        <h3 className="text-3xl font-bold text-[#f4e4bc] medieval-font tracking-widest mb-2 uppercase group-hover:text-white transition-colors leading-tight">
+                        <h3 className="text-3xl font-bold text-[#f4e4bc] medieval-font tracking-widest mb-2 uppercase group-hover:text-white transition-colors">
                           {deck.name}
                         </h3>
                         <div className="divider-gold opacity-30 w-1/2 mx-auto"></div>
@@ -235,9 +240,9 @@ const App: React.FC = () => {
               ) : (
                 <div className="text-center space-y-8 animate-fadeIn">
                   <div className="w-24 h-24 bg-gradient-to-br from-[#b7950b] to-[#7d6608] rounded-full flex items-center justify-center mx-auto shadow-gold">
-                    <i className="fas fa-crown text-black text-4xl"></i>
+                    <i className="fas fa-ghost text-black text-4xl"></i>
                   </div>
-                  <h3 className="text-4xl font-bold text-[#f4e4bc] medieval-font uppercase tracking-tighter">Crônica Finalizada</h3>
+                  <h3 className="text-4xl font-bold text-[#f4e4bc] medieval-font uppercase tracking-tighter">Incursão Finalizada</h3>
                   <button onClick={() => setGameState('SUMMARY')} className="px-8 py-4 bg-[#b7950b] text-black font-bold uppercase tracking-widest rounded-xl hover:bg-white transition-colors medieval-font">Ver Resultado Final</button>
                 </div>
               )}
@@ -342,14 +347,15 @@ const App: React.FC = () => {
                     <h3 className="font-bold text-xl text-[#2c1810] medieval-font uppercase tracking-widest">Sábio Arquiteto</h3>
                   </div>
                   <div className="divider-gold opacity-100 bg-[#2c1810]/20"></div>
-                  <div className="text-[13px] text-[#3e2723] font-serif leading-relaxed italic whitespace-pre-wrap min-h-[200px]">
-                    {isSummarizing ? (
+                  <div className="text-[13px] text-[#3e2723] font-serif leading-relaxed italic min-h-[200px] markdown-content" 
+                       dangerouslySetInnerHTML={{ __html: aiSummary ? marked.parse(aiSummary) : '' }}>
+                    {isSummarizing && (
                       <div className="space-y-3 animate-pulse">
                         <div className="h-3 bg-[#1a0f0a]/10 rounded w-full"></div>
                         <div className="h-3 bg-[#1a0f0a]/10 rounded w-full"></div>
                         <div className="h-3 bg-[#1a0f0a]/10 rounded w-3/4"></div>
                       </div>
-                    ) : aiSummary || "Consultando os astros e logs..."}
+                    )}
                   </div>
                   <button 
                     onClick={() => setGameState('LOBBY')}
