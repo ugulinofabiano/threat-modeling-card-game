@@ -16,8 +16,7 @@ export const DECKS: Deck[] = [
         probability: RiskLevel.HIGH,
         description: 'Um exército de espectros automatizados tenta forçar os selos dos portões usando chaves roubadas de outros reinos.',
         gameHint: 'Tecnologia: Credential Stuffing. Use MFA e Rate Limiting.',
-        image: 'images/AUTH-01.png',
-        imagePrompt: 'A ghostly army of spectral knights trying many golden keys at a massive castle gate, dark fantasy oil painting style.',
+        imagePrompt: 'A swarm of spectral medieval keys flying towards a massive iron gate, blue magical aura, woodcut style',
         mitigation: 'Implementar MFA e bloqueio inteligente de IPs.',
         reference: 'OWASP A07:2021',
         referenceUrl: 'https://owasp.org/Top10/A07_2021-Identification_and_Authentication_Failures/'
@@ -30,7 +29,7 @@ export const DECKS: Deck[] = [
         probability: RiskLevel.MEDIUM,
         description: 'Um cavaleiro deixou o posto, mas sua sombra continua ativa, permitindo que impostores ajam em seu nome.',
         gameHint: 'Tecnologia: Session Hijacking. O token de sessão não expira.',
-        image: 'images/AUTH-02.png',
+        imagePrompt: 'A transparent ghostly knight figure sitting on a throne, identity theft illumination, medieval style',
         mitigation: 'Implementar invalidação de sessão e timeouts curtos.',
         reference: 'OWASP ASVS',
         referenceUrl: 'https://owasp.org/www-project-application-security-verification-standard/'
@@ -43,7 +42,7 @@ export const DECKS: Deck[] = [
         probability: RiskLevel.HIGH,
         description: 'O guardião do portão revela se um nome está na lista real antes mesmo de pedir a senha.',
         gameHint: 'Tecnologia: User Enumeration. Mensagens de erro distintas.',
-        image: 'images/AUTH-03.png',
+        imagePrompt: 'A medieval guard pointing at a name list on a scroll, whispering to a spy in a dark corner',
         mitigation: 'Padronizar respostas de erro de login.',
         reference: 'OWASP WSTG',
         referenceUrl: 'https://owasp.org/www-project-web-security-testing-guide/'
@@ -56,7 +55,7 @@ export const DECKS: Deck[] = [
         probability: RiskLevel.MEDIUM,
         description: 'Os decretos reais são selados com cera comum que pode ser derretida e refeita por qualquer falsificador.',
         gameHint: 'Tecnologia: Weak JWT Secret. Chaves de assinatura fracas.',
-        image: 'images/AUTH-04.png',
+        imagePrompt: 'A candle melting a red wax seal on a medieval scroll, suspicious hands, parchment background',
         mitigation: 'Usar algoritmos de assinatura fortes (RS256) e segredos longos.',
         reference: 'OWASP JWT Security',
         referenceUrl: 'https://cheatsheetseries.owasp.org/cheatsheets/JSON_Web_Token_for_Java_Cheat_Sheet.html'
@@ -69,7 +68,7 @@ export const DECKS: Deck[] = [
         probability: RiskLevel.LOW,
         description: 'Uma pequena porta usada pelos servos durante a construção nunca foi trancada após o término da obra.',
         gameHint: 'Tecnologia: Default Credentials. Senhas de fábrica não alteradas.',
-        image: 'images/AUTH-05.png',
+        imagePrompt: 'A small hidden door in a stone wall overgrown with vines, a shadow figure entering',
         mitigation: 'Alterar todas as senhas padrão e desativar contas administrativas genéricas.',
         reference: 'OWASP A05:2021',
         referenceUrl: 'https://owasp.org/Top10/A05_2021-Security_Misconfiguration/'
@@ -82,7 +81,7 @@ export const DECKS: Deck[] = [
         probability: RiskLevel.MEDIUM,
         description: 'Um plebeu usa um amuleto que imita o brilho do sangue real para acessar áreas restritas do castelo.',
         gameHint: 'Tecnologia: Token Forgery. Falsificação de tokens de autenticação.',
-        image: 'images/AUTH-06.png',
+        imagePrompt: 'A medieval peasant holding a glowing green amulet that projects a royal crest illumination',
         mitigation: 'Validar rigorosamente a assinatura de todos os tokens e selos digitais.',
         reference: 'OWASP A07:2021',
         referenceUrl: 'https://owasp.org/Top10/A07_2021-Identification_and_Authentication_Failures/'
@@ -95,7 +94,7 @@ export const DECKS: Deck[] = [
         probability: RiskLevel.MEDIUM,
         description: 'Um feitiço faz o vigia dormir se ele for questionado muitas vezes seguidas pela mesma pessoa.',
         gameHint: 'Tecnologia: Auth DoS. Bloqueio de conta por força bruta sem limite.',
-        image: 'images/AUTH-07.png',
+        imagePrompt: 'A medieval guard sleeping on a stone bench, dozens of questions as scrolls surrounding him',
         mitigation: 'Implementar limites de tentativas (Rate Limit) e CAPTCHA.',
         reference: 'OWASP Authentication Cheat Sheet',
         referenceUrl: 'https://cheatsheetseries.owasp.org/cheatsheets/Authentication_Cheat_Sheet.html'
@@ -116,7 +115,7 @@ export const DECKS: Deck[] = [
         probability: RiskLevel.MEDIUM,
         description: 'Um mercador envia campos extras no manifesto e o escrivão atualiza propriedades que não deveria.',
         gameHint: 'Tecnologia: Mass Assignment. Alteração de propriedades sensíveis via JSON.',
-        image: 'images/API-01.png',
+        imagePrompt: 'A medieval merchant hiding secret gold bars inside a bag of wheat on a scale',
         mitigation: 'Utilizar DTOs e Allow-lists de campos.',
         reference: 'OWASP API3:2023',
         referenceUrl: 'https://owasp.org/API-Security/editions/2023/en/0xa3-broken-object-property-level-authorization/'
@@ -129,7 +128,7 @@ export const DECKS: Deck[] = [
         probability: RiskLevel.MEDIUM,
         description: 'O mensageiro real é convencido a entregar uma carta dentro do próprio castelo por um inimigo externo.',
         gameHint: 'Tecnologia: SSRF. O servidor faz requisições internas forçadas.',
-        image: 'images/API-02.png',
+        imagePrompt: 'A courier knight standing in a dark medieval tunnel, looking at a confusing map with mirrors',
         mitigation: 'Validar URLs de destino e usar segmentação de rede.',
         reference: 'OWASP A10:2021',
         referenceUrl: 'https://owasp.org/Top10/A10_2021-Server-Side_Request_Forgery_SSRF/'
@@ -142,7 +141,7 @@ export const DECKS: Deck[] = [
         probability: RiskLevel.HIGH,
         description: 'Um inimigo coloca substâncias no poço que alimenta as cozinhas do reino via comandos de voz.',
         gameHint: 'Tecnologia: Injection. Dados maliciosos que alteram queries ou comandos.',
-        image: 'images/API-03.png',
+        imagePrompt: 'A dark hooded figure pouring a glowing purple liquid into a medieval stone well',
         mitigation: 'Parametrizar todas as consultas e validar entradas.',
         reference: 'OWASP A03:2021',
         referenceUrl: 'https://owasp.org/Top10/A03_2021-Injection/'
@@ -155,7 +154,7 @@ export const DECKS: Deck[] = [
         probability: RiskLevel.HIGH,
         description: 'Tantas carroças vazias são enviadas para a ponte que as carroças com mantimentos não conseguem passar.',
         gameHint: 'Tecnologia: DoS. Inundação de requisições para esgotar recursos.',
-        image: 'images/API-04.png',
+        imagePrompt: 'A narrow medieval stone bridge clogged with broken wooden carts, a river below',
         mitigation: 'Implementar Rate Limiting e detecção de anomalias.',
         reference: 'OWASP API4:2023',
         referenceUrl: 'https://owasp.org/API-Security/editions/2023/en/0xa4-unrestricted-resource-consumption/'
@@ -168,7 +167,7 @@ export const DECKS: Deck[] = [
         probability: RiskLevel.MEDIUM,
         description: 'Ao perguntar sobre uma poção, o alquimista revela por acidente a fórmula secreta do reino.',
         gameHint: 'Tecnologia: Verbose Error Messages. Logs ou erros revelando detalhes técnicos.',
-        image: 'images/API-05.png',
+        imagePrompt: 'Two medieval alchemists talking in a smoky lab, one gesturing to a wall of secret formulas',
         mitigation: 'Ocultar detalhes técnicos em mensagens de erro.',
         reference: 'OWASP A04:2021',
         referenceUrl: 'https://owasp.org/Top10/A04_2021-Insecure_Design/'
@@ -181,7 +180,7 @@ export const DECKS: Deck[] = [
         probability: RiskLevel.LOW,
         description: 'Uma carruagem de presentes esconde guerreiros prontos para atacar por dentro.',
         gameHint: 'Tecnologia: Malicious File Upload. Scripts que executam no servidor.',
-        image: 'images/API-06.png',
+        imagePrompt: 'A massive wooden horse being pulled into a medieval castle gate by knights',
         mitigation: 'Validar tipos de arquivos e escanear malware.',
         reference: 'OWASP File Upload',
         referenceUrl: 'https://owasp.org/www-community/vulnerabilities/Unrestricted_File_Upload'
@@ -202,10 +201,75 @@ export const DECKS: Deck[] = [
         probability: RiskLevel.MEDIUM,
         description: 'As moedas de ouro estão em um baú de vidro, visíveis para qualquer um no mercado.',
         gameHint: 'Tecnologia: Plaintext Storage. Dados sensíveis não criptografados.',
-        image: 'images/VAULT-01.png',
+        imagePrompt: 'A transparent chest full of gold coins on a medieval stone pedestal, glowing light',
         mitigation: 'Criptografar dados sensíveis em repouso.',
         reference: 'OWASP A02:2021',
         referenceUrl: 'https://owasp.org/Top10/A02_2021-Cryptographic_Failures/'
+      },
+      {
+        id: 'VAULT-02',
+        title: 'O Eco do Bardo',
+        category: StrideCategory.INFORMATION_DISCLOSURE,
+        impact: RiskLevel.MEDIUM,
+        probability: RiskLevel.HIGH,
+        description: 'O bardo repete todas as ordens dadas no castelo para a multidão na taverna.',
+        gameHint: 'Tecnologia: Logging PII. Gravação de dados pessoais em logs.',
+        imagePrompt: 'A medieval bard singing to a crowd in a tavern, music notes turning into secret text',
+        mitigation: 'Mascarar dados nos logs e auditoria.',
+        reference: 'OWASP Logging',
+        referenceUrl: 'https://cheatsheetseries.owasp.org/cheatsheets/Logging_Cheat_Sheet.html'
+      },
+      {
+        id: 'VAULT-03',
+        title: 'A Chave Debaixo do Tapete',
+        category: StrideCategory.TAMPERING,
+        impact: RiskLevel.HIGH,
+        probability: RiskLevel.LOW,
+        description: 'A chave mestra do tesouro está escondida no mesmo pergaminho que ensina como abrir o cofre.',
+        gameHint: 'Tecnologia: Hardcoded Keys. Chaves no código.',
+        imagePrompt: 'A giant iron key half-hidden under a simple medieval rug on a stone floor',
+        mitigation: 'Utilizar KMS/Vault.',
+        reference: 'NIST Key Management',
+        referenceUrl: 'https://csrc.nist.gov/publications/detail/sp/800-57-part-1/rev-5/final'
+      },
+      {
+        id: 'VAULT-04',
+        title: 'O Registro Apagado',
+        category: StrideCategory.REPUDIATION,
+        impact: RiskLevel.MEDIUM,
+        probability: RiskLevel.MEDIUM,
+        description: 'Um nobre retira ouro e depois apaga seu nome do livro, fingindo que nunca esteve lá.',
+        gameHint: 'Tecnologia: Insufficient Logging. Falta de trilhas de auditoria.',
+        imagePrompt: 'A hand tearing a page from a heavy medieval book in a dark library',
+        mitigation: 'Logs de auditoria imutáveis.',
+        reference: 'OWASP A09:2021',
+        referenceUrl: 'https://owasp.org/Top10/A09_2021-Security_Logging_and_Monitoring_Failures/'
+      },
+      {
+        id: 'VAULT-05',
+        title: 'A Profecia Reutilizada',
+        category: StrideCategory.SPOOFING,
+        impact: RiskLevel.HIGH,
+        probability: RiskLevel.LOW,
+        description: 'Um pergaminho de bênção usado ontem é roubado e usado hoje para entrar no templo sagrado.',
+        gameHint: 'Tecnologia: Replay Attack. Reuso de tokens de autenticação.',
+        imagePrompt: 'A rogue stealing a glowing scroll from a medieval altar, time loop symbols',
+        mitigation: 'Utilizar nonces e tokens de uso único.',
+        reference: 'OWASP Replay Attack',
+        referenceUrl: 'https://owasp.org/www-community/attacks/Replay_attack'
+      },
+      {
+        id: 'VAULT-06',
+        title: 'O Cofre Sem Tranca',
+        category: StrideCategory.INFORMATION_DISCLOSURE,
+        impact: RiskLevel.HIGH,
+        probability: RiskLevel.HIGH,
+        description: 'Um depósito de grãos foi construído sem porta, assumindo que ninguém o encontraria na floresta.',
+        gameHint: 'Tecnologia: Insecure Direct Object Reference (IDOR). Acesso via URL direta.',
+        imagePrompt: 'A medieval granary in the middle of a deep forest with no door, open to anyone',
+        mitigation: 'Verificar autorização em cada acesso a objetos.',
+        reference: 'OWASP API1:2023',
+        referenceUrl: 'https://owasp.org/API-Security/editions/2023/en/0xa1-broken-object-level-authorization/'
       }
     ]
   },
@@ -223,10 +287,23 @@ export const DECKS: Deck[] = [
         probability: RiskLevel.MEDIUM,
         description: 'Uma passagem secreta usada durante a obra nunca foi fechada.',
         gameHint: 'Tecnologia: Exposed Ports. SSH exposto.',
-        image: 'images/INFRA-01.png',
+        imagePrompt: 'A dark medieval tunnel entrance behind a stone wall, torchlight flickering',
         mitigation: 'Hardening de rede.',
         reference: 'OWASP A05:2021',
         referenceUrl: 'https://owasp.org/Top10/A05_2021-Security_Misconfiguration/'
+      },
+      {
+        id: 'INFRA-02',
+        title: 'O Portão Sem Sentinela',
+        category: StrideCategory.TAMPERING,
+        impact: RiskLevel.MEDIUM,
+        probability: RiskLevel.HIGH,
+        description: 'Qualquer carruagem entra no castelo sem ser revistada.',
+        gameHint: 'Tecnologia: Lack of WAF. Sem inspeção de tráfego.',
+        imagePrompt: 'A massive medieval gateway with no guards, villagers entering freely',
+        mitigation: 'Implementar WAF.',
+        reference: 'STRIDE Tampering',
+        referenceUrl: 'https://learn.microsoft.com/en-us/previous-versions/azure/security/develop/threat-modeling-tool-threats#tampering'
       },
       {
         id: 'INFRA-03',
@@ -236,10 +313,328 @@ export const DECKS: Deck[] = [
         probability: RiskLevel.MEDIUM,
         description: 'Dentro das muralhas, ninguém pede identificação.',
         gameHint: 'Tecnologia: Lateral Movement. Falta de segmentação.',
-        image: 'images/INFRA-03.png',
+        imagePrompt: 'A spy in shadows walking past knights in a castle courtyard',
         mitigation: 'Implementar Zero Trust.',
         reference: 'NIST Zero Trust',
         referenceUrl: 'https://csrc.nist.gov/publications/detail/sp/800-207/final'
+      },
+      {
+        id: 'INFRA-04',
+        title: 'O Cerco de Flechas',
+        category: StrideCategory.DENIAL_OF_SERVICE,
+        impact: RiskLevel.HIGH,
+        probability: RiskLevel.LOW,
+        description: 'Milhares de flechas impedem os guardas de defenderem os portões.',
+        gameHint: 'Tecnologia: DDoS. Inundação de tráfego.',
+        imagePrompt: 'Thousands of flaming arrows raining over a medieval castle battlements',
+        mitigation: 'Mitigação de DDoS.',
+        reference: 'OWASP DoS',
+        referenceUrl: 'https://cheatsheetseries.owasp.org/cheatsheets/Denial_of_Service_Cheat_Sheet.html'
+      },
+      {
+        id: 'INFRA-05',
+        title: 'O Vigia Corrompido',
+        category: StrideCategory.TAMPERING,
+        impact: RiskLevel.HIGH,
+        probability: RiskLevel.LOW,
+        description: 'Um espião troca o binóculo do vigia por um que mostra imagens falsas do horizonte.',
+        gameHint: 'Tecnologia: DNS Spoofing. Redirecionamento de tráfego.',
+        imagePrompt: 'A medieval lookout using a brass telescope, distorted landscape ahead',
+        mitigation: 'Usar DNSSEC e monitoramento de integridade.',
+        reference: 'OWASP DNS Security',
+        referenceUrl: 'https://cheatsheetseries.owasp.org/cheatsheets/DNS_Security_Cheat_Sheet.html'
+      },
+      {
+        id: 'INFRA-06',
+        title: 'A Muralha Desmoronando',
+        category: StrideCategory.DENIAL_OF_SERVICE,
+        impact: RiskLevel.HIGH,
+        probability: RiskLevel.LOW,
+        description: 'A fundação da torre norte está podre e qualquer peso extra a fará cair.',
+        gameHint: 'Tecnologia: Memory Leak. Consumo gradual de recursos.',
+        imagePrompt: 'A medieval stone tower with large cracks, crumbling into the sea',
+        mitigation: 'Monitoramento de recursos e perfis de performance.',
+        reference: 'OWASP Resource Exhaustion',
+        referenceUrl: 'https://owasp.org/www-community/vulnerabilities/Resource_exhaustion'
+      }
+    ]
+  },
+  {
+    id: 'deck-frontend',
+    name: 'O Teatro das Sombras',
+    icon: 'fa-masks-theater',
+    description: 'A interface com o mundo exterior. Onde as aparências escondem maldições.',
+    cards: [
+      {
+        id: 'FRONT-01',
+        title: 'A Maldição do Espelho',
+        category: StrideCategory.TAMPERING,
+        impact: RiskLevel.MEDIUM,
+        probability: RiskLevel.HIGH,
+        description: 'Um espião escreve uma maldição no espelho da taverna (XSS).',
+        gameHint: 'Tecnologia: Reflected XSS.',
+        imagePrompt: 'A medieval ornate mirror reflecting glowing green runes instead of a face',
+        mitigation: 'Sanitização de inputs.',
+        reference: 'OWASP A03:2021',
+        referenceUrl: 'https://owasp.org/Top10/A03_2021-Injection/'
+      },
+      {
+        id: 'FRONT-02',
+        title: 'O Vidro Invisível',
+        category: StrideCategory.TAMPERING,
+        impact: RiskLevel.LOW,
+        probability: RiskLevel.MEDIUM,
+        description: 'Um vidro invisível sobreposto ao mapa real faz o general clicar no local errado.',
+        gameHint: 'Tecnologia: Clickjacking.',
+        imagePrompt: 'A general pointing at a map covered by a semi-transparent glass sheet, distortion',
+        mitigation: 'X-Frame-Options.',
+        reference: 'OWASP Clickjacking',
+        referenceUrl: 'https://cheatsheetseries.owasp.org/cheatsheets/Clickjacking_Defense_Cheat_Sheet.html'
+      },
+      {
+        id: 'FRONT-03',
+        title: 'O Bardo Impostor',
+        category: StrideCategory.SPOOFING,
+        impact: RiskLevel.MEDIUM,
+        probability: RiskLevel.MEDIUM,
+        description: 'Um bardo canta canções que convencem o povo a entregar suas chaves para um falso coletor de impostos.',
+        gameHint: 'Tecnologia: Phishing / Social Engineering.',
+        imagePrompt: 'A medieval bardo talking to peasants in a village square, gold coins being handed over',
+        mitigation: 'Educação de usuários e MFA.',
+        reference: 'OWASP Social Engineering',
+        referenceUrl: 'https://owasp.org/www-community/attacks/Social_Engineering'
+      },
+      {
+        id: 'FRONT-04',
+        title: 'O Pergaminho de Outras Terras',
+        category: StrideCategory.TAMPERING,
+        impact: RiskLevel.HIGH,
+        probability: RiskLevel.MEDIUM,
+        description: 'Um mensageiro traz uma carta que, ao ser aberta, desenha símbolos mágicos que controlam a mente de quem lê.',
+        gameHint: 'Tecnologia: DOM-based XSS. Scripts executados no navegador via dados locais.',
+        imagePrompt: 'A medieval scroll opening with a burst of magical light, symbols flying out',
+        mitigation: 'Validar dados de fontes como window.location ou localStorage.',
+        reference: 'OWASP DOM XSS',
+        referenceUrl: 'https://cheatsheetseries.owasp.org/cheatsheets/DOM_based_XSS_Prevention_Cheat_Sheet.html'
+      },
+      {
+        id: 'FRONT-05',
+        title: 'A Estrada de Falsa Direção',
+        category: StrideCategory.TAMPERING,
+        impact: RiskLevel.LOW,
+        probability: RiskLevel.HIGH,
+        description: 'Um sinalizador de estrada foi trocado para apontar para o castelo do inimigo em vez do mercado.',
+        gameHint: 'Tecnologia: Open Redirect. Redirecionamento sem validação.',
+        imagePrompt: 'A wooden medieval road sign with two arrows pointing in opposite directions, shadowy forest',
+        mitigation: 'Validar destinos de redirecionamento.',
+        reference: 'OWASP Redirects',
+        referenceUrl: 'https://cheatsheetseries.owasp.org/cheatsheets/Unvalidated_Redirects_and_Forwards_Cheat_Sheet.html'
+      }
+    ]
+  },
+  {
+    id: 'deck-supply',
+    name: 'O Mercado Estrangeiro',
+    icon: 'fa-ship',
+    description: 'Componentes e aliados externos (Supply Chain). Nem todo presente é uma benção.',
+    cards: [
+      {
+        id: 'SUPPLY-01',
+        title: 'O Tempero Envenenado',
+        category: StrideCategory.TAMPERING,
+        impact: RiskLevel.HIGH,
+        probability: RiskLevel.HIGH,
+        description: 'Um ingrediente essencial contém veneno injetado pelo mercador na fonte.',
+        gameHint: 'Tecnologia: Vulnerable Dependencies.',
+        imagePrompt: 'A medieval merchant ship at a dock, bags of spices spilling out purple smoke',
+        mitigation: 'Análise SCA.',
+        reference: 'OWASP A06:2021',
+        referenceUrl: 'https://owasp.org/Top10/A06_2021-Vulnerable_and_Outdated_Components/'
+      },
+      {
+        id: 'SUPPLY-02',
+        title: 'O Nome Quase Igual',
+        category: StrideCategory.SPOOFING,
+        impact: RiskLevel.HIGH,
+        probability: RiskLevel.LOW,
+        description: 'Um alquimista cria uma poção idêntica com nome ligeiramente diferente para enganar o exército.',
+        gameHint: 'Tecnologia: Typosquatting.',
+        imagePrompt: 'Two identical medieval glass bottles with slightly different runes on labels',
+        mitigation: 'Verificar hashes.',
+        reference: 'OWASP Supply Chain',
+        referenceUrl: 'https://owasp.org/www-project-software-supply-chain-security-guide/'
+      },
+      {
+        id: 'SUPPLY-03',
+        title: 'O Escravo nas Cozinhas',
+        category: StrideCategory.ELEVATION_OF_PRIVILEGE,
+        impact: RiskLevel.HIGH,
+        probability: RiskLevel.LOW,
+        description: 'Um novo ajudante de cozinha, contratado sem referências, acaba por ser um assassino infiltrado.',
+        gameHint: 'Tecnologia: Insider Threat / Untrusted Plugin. Código de terceiros com privilégios excessivos.',
+        imagePrompt: 'A medieval chef in a busy kitchen, a shadowy figure holding a dagger in the background',
+        mitigation: 'Princípio do menor privilégio para integrações.',
+        reference: 'OWASP Least Privilege',
+        referenceUrl: 'https://owasp.org/www-community/attacks/Least_Privilege'
+      },
+      {
+        id: 'SUPPLY-04',
+        title: 'A Receita Roubada',
+        category: StrideCategory.INFORMATION_DISCLOSURE,
+        impact: RiskLevel.MEDIUM,
+        probability: RiskLevel.MEDIUM,
+        description: 'O livro de receitas secreto do castelo é copiado por um escriba que vende as cópias para o reino vizinho.',
+        gameHint: 'Tecnologia: Intellectual Property Theft / Data Exfiltration via 3rd party.',
+        imagePrompt: 'A scribe secretly copying a glowing medieval book at night by candlelight',
+        mitigation: 'Monitorar acesso a segredos e repositórios.',
+        reference: 'OWASP Data Exfiltration',
+        referenceUrl: 'https://owasp.org/www-community/attacks/Data_Exfiltration'
+      },
+      {
+        id: 'SUPPLY-05',
+        title: 'A Espada de Vidro',
+        category: StrideCategory.TAMPERING,
+        impact: RiskLevel.HIGH,
+        probability: RiskLevel.MEDIUM,
+        description: 'As espadas entregues pelo ferreiro parecem de aço, mas quebram no primeiro golpe da batalha.',
+        gameHint: 'Tecnologia: Subverted Build Process. Injeção de código malicioso durante o build.',
+        imagePrompt: 'A medieval sword shattering into glass pieces against a stone wall',
+        mitigation: 'Garantir integridade do pipeline de CI/CD.',
+        reference: 'OWASP CI/CD Security',
+        referenceUrl: 'https://owasp.org/www-project-top-10-ci-cd-security-risks/'
+      }
+    ]
+  },
+  {
+    id: 'deck-logic',
+    name: 'As Leis da Corte',
+    icon: 'fa-scale-balanced',
+    description: 'Falhas na lógica das regras que governam o reino. Erros de negócio.',
+    cards: [
+      {
+        id: 'LOGIC-01',
+        title: 'O Duelo Simultâneo',
+        category: StrideCategory.TAMPERING,
+        impact: RiskLevel.MEDIUM,
+        probability: RiskLevel.LOW,
+        description: 'Dois cavaleiros pegam a mesma espada ao mesmo tempo.',
+        gameHint: 'Tecnologia: Race Condition.',
+        imagePrompt: 'Two medieval knights reaching for the same glowing sword stuck in a stone',
+        mitigation: 'Locks atômicos.',
+        reference: 'OWASP Race Condition',
+        referenceUrl: 'https://owasp.org/www-community/vulnerabilities/Race_Condition'
+      },
+      {
+        id: 'LOGIC-02',
+        title: 'O Imposto Negativo',
+        category: StrideCategory.TAMPERING,
+        impact: RiskLevel.HIGH,
+        probability: RiskLevel.LOW,
+        description: 'Um mercador declara venda de "-10" sacas para receber moedas.',
+        gameHint: 'Tecnologia: Business Logic Flaw.',
+        imagePrompt: 'A medieval merchant receiving gold from a confused royal tax collector',
+        mitigation: 'Validação de sinais.',
+        reference: 'OWASP Logic Flaws',
+        referenceUrl: 'https://portswigger.net/web-security/logic-vulnerabilities'
+      },
+      {
+        id: 'LOGIC-03',
+        title: 'O Pedido Infinito',
+        category: StrideCategory.DENIAL_OF_SERVICE,
+        impact: RiskLevel.MEDIUM,
+        probability: RiskLevel.MEDIUM,
+        description: 'O escriba tenta trazer todos os grãos de uma vez e desmaia.',
+        gameHint: 'Tecnologia: Resource Exhaustion.',
+        imagePrompt: 'A medieval scribe buried under thousands of falling scrolls',
+        mitigation: 'Paginação.',
+        reference: 'OWASP API4:2023',
+        referenceUrl: 'https://owasp.org/API-Security/editions/2023/en/0xa4-unrestricted-resource-consumption/'
+      },
+      {
+        id: 'LOGIC-04',
+        title: 'O Cupom Infinito',
+        category: StrideCategory.TAMPERING,
+        impact: RiskLevel.MEDIUM,
+        probability: RiskLevel.MEDIUM,
+        description: 'Um camponês usa a mesma autorização de pão dez vezes no mesmo dia antes que o padeiro perceba.',
+        gameHint: 'Tecnologia: Replay / Business Validation. Falta de controle de estado.',
+        imagePrompt: 'A peasant carrying ten loaves of bread while showing a single small scroll to a baker',
+        mitigation: 'Validar unicidade de transações e cupons.',
+        reference: 'OWASP Business Logic',
+        referenceUrl: 'https://owasp.org/www-community/vulnerabilities/Business_logic_vulnerability'
+      },
+      {
+        id: 'LOGIC-05',
+        title: 'O Escrivão Impaciente',
+        category: StrideCategory.DENIAL_OF_SERVICE,
+        impact: RiskLevel.MEDIUM,
+        probability: RiskLevel.MEDIUM,
+        description: 'O escrivão para de anotar novos decretos se o anterior demorar mais do que um piscar de olhos para ser selado.',
+        gameHint: 'Tecnologia: Slowloris / Timeout Flaw. Manter conexões abertas para travar o sistema.',
+        imagePrompt: 'An hourglass on a medieval desk, the sand is stuck and a crowd of people is waiting',
+        mitigation: 'Configurar timeouts agressivos e limites de conexões simultâneas.',
+        reference: 'OWASP Slowloris',
+        referenceUrl: 'https://owasp.org/www-community/attacks/Slowloris'
+      }
+    ]
+  },
+  {
+    id: 'deck-monitoring',
+    name: 'As Torres de Vigia',
+    icon: 'fa-tower-observation',
+    description: 'Observabilidade e resposta. O que os olhos não veem, o reino sente.',
+    cards: [
+      {
+        id: 'MON-01',
+        title: 'O Nevoeiro da Batalha',
+        category: StrideCategory.INFORMATION_DISCLOSURE,
+        impact: RiskLevel.HIGH,
+        probability: RiskLevel.MEDIUM,
+        description: 'O castelo está sob ataque, mas o capitão da guarda não recebe nenhum aviso porque os pombos-correio estão presos.',
+        gameHint: 'Tecnologia: Lack of Alerting. Ninguém percebe o ataque em tempo real.',
+        imagePrompt: 'A medieval castle surrounded by thick fog, an enemy army approaching silently',
+        mitigation: 'Implementar alertas em tempo real para erros e anomalias.',
+        reference: 'OWASP A09:2021',
+        referenceUrl: 'https://owasp.org/Top10/A09_2021-Security_Logging_and_Monitoring_Failures/'
+      },
+      {
+        id: 'MON-02',
+        title: 'O Livro de Registros Falsos',
+        category: StrideCategory.REPUDIATION,
+        impact: RiskLevel.MEDIUM,
+        probability: RiskLevel.LOW,
+        description: 'Um espião escreve mil entradas falsas no livro de visitas para esconder sua própria entrada.',
+        gameHint: 'Tecnologia: Log Injection. Poluição de logs para dificultar investigação.',
+        imagePrompt: 'A messy pile of medieval scrolls with ink blots everywhere, a hand writing frantically',
+        mitigation: 'Sanitizar dados antes de gravar nos logs.',
+        reference: 'OWASP Log Injection',
+        referenceUrl: 'https://owasp.org/www-community/attacks/Log_Injection'
+      },
+      {
+        id: 'MON-03',
+        title: 'A Sentinela de Pedra',
+        category: StrideCategory.DENIAL_OF_SERVICE,
+        impact: RiskLevel.LOW,
+        probability: RiskLevel.HIGH,
+        description: 'O vigia anota absolutamente tudo: cada mosca que passa, cada folha que cai. O livro acaba em uma hora.',
+        gameHint: 'Tecnologia: Log Flooding. Disco cheio por excesso de logs inúteis.',
+        imagePrompt: 'A medieval guard writing in a giant book while looking at a single butterfly',
+        mitigation: 'Configurar níveis de log e retenção automática.',
+        reference: 'OWASP Logging Guide',
+        referenceUrl: 'https://cheatsheetseries.owasp.org/cheatsheets/Logging_Cheat_Sheet.html'
+      },
+      {
+        id: 'MON-04',
+        title: 'O Espelho de Vigilância Quebrado',
+        category: StrideCategory.TAMPERING,
+        impact: RiskLevel.HIGH,
+        probability: RiskLevel.LOW,
+        description: 'O capitão olha para o espelho mágico de vigilância, mas ele mostra uma imagem de ontem, quando tudo estava calmo.',
+        gameHint: 'Tecnologia: Monitoring Tampering. Atacante desativa ou altera o monitoramento.',
+        imagePrompt: 'A medieval wizard looking at a cracked crystal ball showing a peaceful village while fire is outside',
+        mitigation: 'Proteger a infraestrutura de monitoramento com MFA e segregação.',
+        reference: 'OWASP Detection Engineering',
+        referenceUrl: 'https://owasp.org/www-project-detection-engineering/'
       }
     ]
   }

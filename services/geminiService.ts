@@ -3,6 +3,7 @@ import { GoogleGenAI } from "@google/genai";
 import { BacklogItem, SecurityCard } from '../types';
 
 // Cache keys for persistence
+const IMAGE_CACHE_KEY = 'tmm_image_cache';
 const INTEL_CACHE_KEY = 'tmm_intel_cache';
 
 const getCache = (key: string) => {
@@ -42,23 +43,48 @@ export const generateSecuritySummary = async (backlog: BacklogItem[]) => {
     return response.text;
   } catch (error) {
     console.error("Erro ao gerar resumo Gemini:", error);
-    
-    return `
-      **Relatório de Contingência do Escriba**
-      
-      O Mago Real está indisponível no momento, mas os registros mostram que você identificou **${backlog.length} ameaças**.
-      
-      **Prioridade Imediata:** Revisar as ameaças de Impacto ALTO na Cidadela.
-      **Conselho do Reino:** Não deixe que as sombras se acumulem no backlog.
-      **Próximos Passos:** 
-      1. Triar os itens aceitos com a equipe técnica.
-      2. Validar as mitigações sugeridas em cada pergaminho.
-      3. Agendar uma nova expedição para os decks restantes.
-    `.trim();
+    return "Não foi possível gerar o resumo inteligente no momento, mas seu backlog está salvo!";
+  }
+};
+
+export const generateCardImage = async (cardId: string, prompt: string): Promise<string | null> => {
+  // Check Cache First
+  const cache = getCache(IMAGE_CACHE_KEY);
+  if (cache[cardId]) return cache[cardId];
+
+  const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
+  const fullPrompt = `Antique medieval manuscript illumination, woodcut style, depicting ${prompt}, aged parchment background, golden ink details, highly detailed historical fantasy art, dark and mysterious atmosphere.`;
+
+  try {
+    // Corrected to use string prompt directly for simplicity and to follow documentation best practices
+    const response = await ai.models.generateContent({
+      model: 'gemini-2.5-flash-image',
+      contents: fullPrompt,
+      config: {
+        imageConfig: {
+          aspectRatio: "3:4"
+        }
+      }
+    });
+
+    for (const part of response.candidates[0].content.parts) {
+      if (part.inlineData) {
+        const base64 = `data:image/png;base64,${part.inlineData.data}`;
+        // Save to cache
+        cache[cardId] = base64;
+        setCache(IMAGE_CACHE_KEY, cache);
+        return base64;
+      }
+    }
+    return null;
+  } catch (error) {
+    console.error("Erro ao gerar imagem medieval:", error);
+    return null;
   }
 };
 
 export const generateThreatIntelligence = async (card: SecurityCard): Promise<string> => {
+  // Check Cache First
   const cache = getCache(INTEL_CACHE_KEY);
   if (cache[card.id]) return cache[card.id];
 
@@ -82,26 +108,13 @@ export const generateThreatIntelligence = async (card: SecurityCard): Promise<st
     });
     const text = response.text || "O pergaminho está em branco... tente novamente mais tarde.";
     
+    // Save to cache
     cache[card.id] = text;
     setCache(INTEL_CACHE_KEY, cache);
     
     return text;
   } catch (error) {
     console.error("Erro ao gerar inteligência:", error);
-    
-    return `
-      **Pergaminho de Emergência Arcano**
-      
-      O Mago Real está exausto e não pode consultar os astros agora. No entanto, os arquivos do reino dizem o seguinte sobre **${card.title}**:
-      
-      **Natureza da Maldição:** 
-      ${card.description}
-      
-      **Como Forjar as Defesas:**
-      ${card.mitigation}
-      
-      **Dica do Sábio:**
-      ${card.gameHint || "Fique atento aos sinais e não ignore os alertas das sentinelas."}
-    `.trim();
+    return "As estrelas não estão alinhadas para esta revelação agora.";
   }
 };
