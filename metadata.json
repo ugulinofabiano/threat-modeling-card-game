@@ -1,0 +1,5 @@
+{
+  "name": "Threat Modeling Master",
+  "description": "Uma plataforma interativa de Threat Modeling baseada em cartas para equipes de desenvolvimento identificarem, discutirem e priorizarem riscos de segurança usando STRIDE.",
+  "requestFramePermissions": []
+}
