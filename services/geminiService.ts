@@ -64,7 +64,8 @@ O Mago Real está indisponível, mas você identificou **${backlog.length} amea�
 export const generateCardImage = async (cardId: string, prompt: string): Promise<string | null> => {
   // Retorna o caminho da imagem local na pasta images
   // O nome da imagem será o ID da carta seguido de .png
-  return `/images/${cardId}.png`;
+  const baseUrl = import.meta.env.BASE_URL || '/';
+  return `${baseUrl}images/${cardId}.png`;
 };
 
 export const generateThreatIntelligence = async (card: SecurityCard): Promise<string> => {

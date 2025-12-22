@@ -150,7 +150,7 @@ const App: React.FC = () => {
                     
                     <div className="relative w-36 h-36 rounded-full overflow-hidden z-10">
                       <img 
-                        src="/images/HEAD.png" 
+                        src={`${import.meta.env.BASE_URL}images/HEAD.png`}
                         alt="Ameaças Ocultas"
                         className="w-full h-full object-cover rounded-full group-hover:brightness-110 transition-all duration-500"
                       />
