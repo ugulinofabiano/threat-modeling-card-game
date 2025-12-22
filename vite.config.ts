@@ -10,8 +10,10 @@ const __dirname = path.dirname(__filename);
 
 export default defineConfig(({ mode }) => {
     const env = loadEnv(mode, '.', '');
+    // Use base path for production build, root for development
+    const base = mode === 'production' ? '/threat-modeling-card-game/' : '/';
     return {
-      base: '/threat-modeling-card-game/',
+      base,
       server: {
         port: 3000,
         host: '0.0.0.0',

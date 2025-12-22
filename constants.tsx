@@ -35,7 +35,7 @@ export const DECKS: Deck[] = [
         referenceUrl: 'https://owasp.org/www-project-application-security-verification-standard/'
       },
       {
-        id: 'AUTH-03',
+        id: 'auth-03',
         title: 'O Escrivão Indiscreto',
         category: StrideCategory.INFORMATION_DISCLOSURE,
         impact: RiskLevel.MEDIUM,

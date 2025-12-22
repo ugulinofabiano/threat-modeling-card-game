@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { SecurityCard, RiskLevel } from '../types';
 import { generateCardImage, generateThreatIntelligence } from '../services/geminiService';
+import securityService from '../services/securityService';
 import { marked } from 'marked';
 
 interface Props {
@@ -51,9 +52,39 @@ const SecurityCardComp: React.FC<Props> = ({ card, onAccept, onPass, onSkip, onE
     if (!intelContent) {
       setIsIntelLoading(true);
       try {
-        const intel = await generateThreatIntelligence(card);
-        setIntelContent(intel);
+        // Prefer local security details if available (async fetch + cache)
+        const local = await securityService.getSecurityDetail(card.id);
+        if (local) {
+          // Build a markdown description from the JSON structure
+          let md = `## ${local.name}\n\n`;
+          if (local.technical_description) md += `**Descrição técnica:** ${local.technical_description}\n\n`;
+          if (local.when_it_occurs) {
+            md += `**Quando ocorre:**\n`;
+            local.when_it_occurs.forEach((s: string) => { md += `- ${s}\n`; });
+            md += `\n`;
+          }
+          if (local.how_to_identify) {
+            md += `**Como identificar:**\n`;
+            local.how_to_identify.forEach((s: string) => { md += `- ${s}\n`; });
+            md += `\n`;
+          }
+          if (local.how_to_prevent) {
+            md += `**Como prevenir:**\n`;
+            local.how_to_prevent.forEach((s: string) => { md += `- ${s}\n`; });
+            md += `\n`;
+          }
+          if (local.qual_o_risco) {
+            md += `**Riscos:**\n`;
+            local.qual_o_risco.forEach((s: string) => { md += `- ${s}\n`; });
+            md += `\n`;
+          }
+          setIntelContent(md);
+        } else {
+          const intel = await generateThreatIntelligence(card);
+          setIntelContent(intel);
+        }
       } catch (error) {
+        console.error('Erro ao obter inteligência local:', error);
         setIntelContent("As estrelas estão nubladas. Consulte os arquivos locais na descrição da carta.");
       } finally {
         setIsIntelLoading(false);
