@@ -68,9 +68,18 @@ const App: React.FC = () => {
 
   useEffect(() => {
     if (gameState === 'PLAYING' && currentCards.length === 0 && selectedDeck !== null) {
-      setGameState('SUMMARY');
+      // Se não houver backlog, volta direto para LOBBY
+      // Caso contrário, vai para SUMMARY
+      if (backlog.length === 0) {
+        setGameState('LOBBY');
+        setSelectedDeck(null);
+        setBacklog([]);
+        setAiSummary(null);
+      } else {
+        setGameState('SUMMARY');
+      }
     }
-  }, [currentCards.length, gameState, selectedDeck]);
+  }, [currentCards.length, gameState, selectedDeck, backlog.length]);
 
   useEffect(() => {
     if (gameState === 'SUMMARY' && backlog.length > 0 && !aiSummary) {
@@ -134,10 +143,18 @@ const App: React.FC = () => {
                  <div className="absolute -inset-20 bg-[#b7950b]/10 blur-[100px] rounded-full opacity-60 group-hover:opacity-100 transition-opacity duration-1000 animate-pulse"></div>
                  
                  {/* Ícone do Fantasma */}
-                 <div className="relative w-48 h-48 flex items-center justify-center transition-transform duration-700 group-hover:scale-110">
-                    <div className="absolute inset-0 bg-gradient-to-t from-[#b7950b]/5 to-transparent rounded-full border border-[#b7950b]/10 scale-150 opacity-50"></div>
+                 <div className="relative w-36 h-36 flex items-center justify-center transition-transform duration-700 group-hover:scale-110">
+                    {/* Aura de luz ao redor da imagem */}
+                    <div className="absolute inset-0 w-36 h-36 rounded-full bg-gradient-to-r from-[#b7950b]/30 via-[#b7950b]/50 to-[#b7950b]/30 blur-xl animate-pulse"></div>
+                    <div className="absolute inset-0 w-36 h-36 rounded-full shadow-[0_0_40px_rgba(183,149,11,0.8),0_0_80px_rgba(183,149,11,0.4),0_0_120px_rgba(183,149,11,0.2)]"></div>
                     
-                    <i className="fas fa-ghost text-8xl md:text-9xl text-[#f4e4bc] drop-shadow-[0_0_35px_rgba(183,149,11,0.9)] group-hover:text-white transition-all duration-500 animate-[bounce_3s_infinite]"></i>
+                    <div className="relative w-36 h-36 rounded-full overflow-hidden z-10">
+                      <img 
+                        src="/images/HEAD.png" 
+                        alt="Ameaças Ocultas"
+                        className="w-full h-full object-cover rounded-full group-hover:brightness-110 transition-all duration-500"
+                      />
+                    </div>
                     
                     <div className="absolute inset-0 z-0">
                        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[2px] h-12 bg-gradient-to-t from-[#b7950b] to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
@@ -243,7 +260,11 @@ const App: React.FC = () => {
                     <i className="fas fa-ghost text-black text-4xl"></i>
                   </div>
                   <h3 className="text-4xl font-bold text-[#f4e4bc] medieval-font uppercase tracking-tighter">Incursão Finalizada</h3>
-                  <button onClick={() => setGameState('SUMMARY')} className="px-8 py-4 bg-[#b7950b] text-black font-bold uppercase tracking-widest rounded-xl hover:bg-white transition-colors medieval-font">Ver Resultado Final</button>
+                  <p className="text-[#b7950b] text-sm">
+                    {backlog.length === 0 
+                      ? 'Nenhuma ameaça foi aceita. Retornando ao lobby...' 
+                      : 'Redirecionando para o relatório...'}
+                  </p>
                 </div>
               )}
             </div>
@@ -255,6 +276,12 @@ const App: React.FC = () => {
             <div className="text-center space-y-4">
               <h2 className="text-5xl font-bold text-[#f4e4bc] medieval-font gold-glow uppercase">Relatório de Fortificação</h2>
               <p className="text-[#8d6e63] uppercase tracking-[0.2em] text-[10px] font-bold">Capítulo: {selectedDeck?.name}</p>
+              <button 
+                onClick={() => setGameState('LOBBY')}
+                className="mt-6 px-8 py-4 bg-[#b7950b] hover:bg-[#9a7d0a] text-black font-bold uppercase tracking-widest rounded-xl transition-all shadow-lg medieval-font"
+              >
+                Voltar ao Lobby
+              </button>
             </div>
             
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">

@@ -3,7 +3,6 @@ import { GoogleGenAI } from "@google/genai";
 import { BacklogItem, SecurityCard } from '../types';
 
 // Cache keys for persistence
-const IMAGE_CACHE_KEY = 'tmm_image_cache';
 const INTEL_CACHE_KEY = 'tmm_intel_cache';
 
 const getCache = (key: string) => {
@@ -63,31 +62,9 @@ O Mago Real está indisponível, mas você identificou **${backlog.length} amea�
 };
 
 export const generateCardImage = async (cardId: string, prompt: string): Promise<string | null> => {
-  const cache = getCache(IMAGE_CACHE_KEY);
-  if (cache[cardId]) return cache[cardId];
-
-  const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
-  const fullPrompt = `Dark antique medieval manuscript illumination, woodcut style, depicting ${prompt}, aged parchment background, cinematic lighting, golden ink details, highly detailed.`;
-
-  try {
-    const response = await ai.models.generateContent({
-      model: 'gemini-2.5-flash-image',
-      contents: fullPrompt,
-      config: { imageConfig: { aspectRatio: "3:4" } }
-    });
-
-    for (const part of response.candidates[0].content.parts) {
-      if (part.inlineData) {
-        const base64 = `data:image/png;base64,${part.inlineData.data}`;
-        cache[cardId] = base64;
-        setCache(IMAGE_CACHE_KEY, cache);
-        return base64;
-      }
-    }
-    return null;
-  } catch (error) {
-    return null;
-  }
+  // Retorna o caminho da imagem local na pasta images
+  // O nome da imagem será o ID da carta seguido de .png
+  return `/images/${cardId}.png`;
 };
 
 export const generateThreatIntelligence = async (card: SecurityCard): Promise<string> => {
