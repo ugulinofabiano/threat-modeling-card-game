@@ -1,0 +1,759 @@
+{
+  "security_details": {
+    "AUTH-01": {
+      "name": "Credential Stuffing",
+      "technical_description": "Um exército de espectros automatizados tenta forçar os selos dos portões usando chaves roubadas de outros reinos.",
+      "when_it_occurs": [
+        "Quando o sistema não possui MFA obrigatório",
+        "Quando não há limitação de tentativas por IP, ASN ou fingerprint de dispositivo"
+      ],
+      "how_to_identify": [
+        "Grande volume de tentativas de login em curto espaço de tempo",
+        "Múltiplos logins para usuários distintos a partir do mesmo IP ou botnet"
+      ],
+      "how_to_prevent": [
+        "Implementar MFA e bloqueio inteligente de IPs",
+        "Rate limiting progressivo"
+      ],
+      "qual_o_risco": [
+        "Comprometimento em massa de contas",
+        "Fraude financeira"
+      ]
+    },
+    "AUTH-02": {
+      "name": "Session Hijacking",
+      "technical_description": "Um cavaleiro deixou o posto, mas sua sombra continua ativa, permitindo que impostores ajam em seu nome.",
+      "when_it_occurs": [
+        "Tokens de sessão sem expiração adequada",
+        "Ausência de invalidação após logout"
+      ],
+      "how_to_identify": [
+        "Sessões ativas por períodos anormalmente longos",
+        "Acesso simultâneo à mesma conta a partir de múltiplos locais"
+      ],
+      "how_to_prevent": [
+        "Implementar invalidação de sessão e timeouts curtos",
+        "Rotação de tokens"
+      ],
+      "qual_o_risco": [
+        "Impersonação completa do usuário"
+      ]
+    },
+    "auth-03": {
+      "name": "User Enumeration",
+      "technical_description": "O guardião do portão revela se um nome está na lista real antes mesmo de pedir a senha.",
+      "when_it_occurs": [
+        "Mensagens de erro distintas para usuário inexistente e senha incorreta",
+        "Diferenças de tempo causadas por hash de senha"
+      ],
+      "how_to_identify": [
+        "Comparação de respostas para usuários válidos e inválidos",
+        "Análise de Content-Length e Response Time"
+      ],
+      "how_to_prevent": [
+        "Mensagens de erro genéricas",
+        "Execução em tempo constante (dummy hash)"
+      ],
+      "qual_o_risco": [
+        "Facilita força bruta e credential stuffing"
+      ]
+    },
+    "AUTH-04": {
+      "name": "Weak JWT Secret",
+      "technical_description": "Os decretos reais são selados com cera comum que pode ser derretida e refeita por qualquer falsificador.",
+      "when_it_occurs": [
+        "Uso de HS256 com segredos curtos",
+        "Segredos versionados no código"
+      ],
+      "how_to_identify": [
+        "Chaves curtas (<256 bits)",
+        "Mesmo segredo em múltiplos ambientes"
+      ],
+      "how_to_prevent": [
+        "Usar algoritmos de assinatura fortes (RS256)",
+        "Rotação de chaves"
+      ],
+      "qual_o_risco": [
+        "Escalada de privilégio"
+      ]
+    },
+    "AUTH-05": {
+      "name": "Default Credentials",
+      "technical_description": "Uma pequena porta usada pelos servos durante a construção nunca foi trancada após o término da obra.",
+      "when_it_occurs": [
+        "Deploy rápido sem hardening",
+        "Ambientes esquecidos (dev/test)"
+      ],
+      "how_to_identify": [
+        "Tentativas de login com combinações conhecidas",
+        "Contas genéricas ativas"
+      ],
+      "how_to_prevent": [
+        "Alterar todas as senhas padrão",
+        "Desativação de usuários padrão"
+      ],
+      "qual_o_risco": [
+        "Comprometimento total do sistema"
+      ]
+    },
+    "AUTH-06": {
+      "name": "Token Forgery",
+      "technical_description": "Um plebeu usa um amuleto que imita o brilho do sangue real para acessar áreas restritas do castelo.",
+      "when_it_occurs": [
+        "Não validação de assinatura",
+        "Confiança excessiva em dados do cliente"
+      ],
+      "how_to_identify": [
+        "Tokens aceitos sem assinatura válida"
+      ],
+      "how_to_prevent": [
+        "Validar rigorosamente a assinatura de todos os tokens",
+        "Whitelist de algoritmos"
+      ],
+      "qual_o_risco": [
+        "Impersonação"
+      ]
+    },
+    "AUTH-07": {
+      "name": "Authentication DoS",
+      "technical_description": "Um feitiço faz o vigia dormir se ele for questionado muitas vezes seguidas pela mesma pessoa.",
+      "when_it_occurs": [
+        "Bloqueio rígido de contas",
+        "Ausência de rate limiting inteligente"
+      ],
+      "how_to_identify": [
+        "Múltiplas contas bloqueadas simultaneamente"
+      ],
+      "how_to_prevent": [
+        "Rate limiting adaptativo",
+        "CAPTCHA progressivo"
+      ],
+      "qual_o_risco": [
+        "Interrupção do serviço"
+      ]
+    },
+    "API-01": {
+      "name": "Mass Assignment",
+      "technical_description": "Um mercador envia campos extras no manifesto e o escrivão atualiza propriedades que não deveria.",
+      "when_it_occurs": [
+        "Uso direto de modelos de domínio em APIs",
+        "Falta de validação de payload"
+      ],
+      "how_to_identify": [
+        "Alteração de flags administrativas via JSON",
+        "Campos sensíveis modificáveis pelo cliente"
+      ],
+      "how_to_prevent": [
+        "Utilizar DTOs e Allow-lists de campos"
+      ],
+      "qual_o_risco": [
+        "Escalada de privilégio"
+      ]
+    },
+    "API-02": {
+      "name": "SSRF (O Mensageiro Iludido)",
+      "technical_description": "O mensageiro real é convencido a entregar uma carta dentro do próprio castelo por um inimigo externo (SSRF).",
+      "when_it_occurs": [
+        "Servidor faz requisições a URLs controladas por usuário"
+      ],
+      "how_to_identify": [
+        "Logs de requisições a recursos internos iniciadas por endpoints públicos"
+      ],
+      "how_to_prevent": [
+        "Validar e whitelistar URLs de destino",
+        "Segmentação de rede"
+      ],
+      "qual_o_risco": [
+        "Exfiltração de dados internos",
+        "Acesso a serviços internos não expostos"
+      ]
+    },
+    "API-03": {
+      "name": "Injection (O Envenenamento da Fonte)",
+      "technical_description": "Um inimigo insere comandos maliciosos que alteram queries ou comandos (Injection).",
+      "when_it_occurs": [
+        "Entrada do usuário usada diretamente em consultas ou comandos sem parametrização"
+      ],
+      "how_to_identify": [
+        "Comportamento inesperado em consultas após entrada maliciosa"
+      ],
+      "how_to_prevent": [
+        "Parametrizar todas as consultas",
+        "Validar entradas"
+      ],
+      "qual_o_risco": [
+        "Comprometimento do banco de dados",
+        "Execução remota de comandos"
+      ]
+    },
+    "API-04": {
+      "name": "Denial of Service (O Bloqueio das Estradas)",
+      "technical_description": "Tantas requisições vazias são enviadas que recursos legítimos ficam indisponíveis.",
+      "when_it_occurs": [
+        "Picos de tráfego maliciosos ou malformados sem mitigação"
+      ],
+      "how_to_identify": [
+        "Uso excessivo de CPU/memória e latência crescente"
+      ],
+      "how_to_prevent": [
+        "Implementar Rate Limiting",
+        "Detecção de anomalias"
+      ],
+      "qual_o_risco": [
+        "Interrupção do serviço"
+      ]
+    },
+    "API-05": {
+      "name": "Verbose Error Messages (A Fofoca dos Alquimistas)",
+      "technical_description": "Mensagens de erro ou logs que revelam detalhes técnicos sensíveis.",
+      "when_it_occurs": [
+        "Erros expostos ao usuário com stack traces ou dados sensíveis"
+      ],
+      "how_to_identify": [
+        "Mensagens de erro detalhadas visíveis em respostas públicas"
+      ],
+      "how_to_prevent": [
+        "Ocultar detalhes técnicos em mensagens de erro",
+        "Logar internamente com mascaramento"
+      ],
+      "qual_o_risco": [
+        "Exposição de informações internas que facilitam ataques"
+      ]
+    },
+    "API-06": {
+      "name": "Malicious File Upload (O Cavalo de Troia)",
+      "technical_description": "Upload de arquivos que contêm código malicioso ou exploram falhas no processamento de arquivos.",
+      "when_it_occurs": [
+        "Aceitação de uploads sem validação de tipo/tamanho/conteúdo"
+      ],
+      "how_to_identify": [
+        "Execução inesperada após upload ou uploads com extensões suspeitas"
+      ],
+      "how_to_prevent": [
+        "Validar tipos de arquivo",
+        "Escanear malware"
+      ],
+      "qual_o_risco": [
+        "Execução remota de código",
+        "Comprometimento do servidor"
+      ]
+    },
+    "VAULT-01": {
+      "name": "Plaintext Storage (O Cofre de Cristal)",
+      "technical_description": "Dados sensíveis armazenados sem criptografia, visíveis a quem acessa o armazenamento.",
+      "when_it_occurs": [
+        "Armazenamento de segredos ou PII sem criptografia"
+      ],
+      "how_to_identify": [
+        "Revisão de armazenamento mostrando dados em texto claro"
+      ],
+      "how_to_prevent": [
+        "Criptografar dados sensíveis em repouso",
+        "Gerenciar chaves com KMS"
+      ],
+      "qual_o_risco": [
+        "Exposição massiva de dados pessoais"
+      ]
+    },
+    "VAULT-02": {
+      "name": "Logging PII (O Eco do Bardo)",
+      "technical_description": "Gravação de dados pessoais identificáveis em logs acessíveis.",
+      "when_it_occurs": [
+        "Aplicação registra PII em logs sem mascaramento"
+      ],
+      "how_to_identify": [
+        "Análise de logs mostrando PII"
+      ],
+      "how_to_prevent": [
+        "Mascarar dados nos logs e auditoria"
+      ],
+      "qual_o_risco": [
+        "Vazamento de dados pessoais"
+      ]
+    },
+    "VAULT-03": {
+      "name": "Hardcoded Keys (A Chave Debaixo do Tapete)",
+      "technical_description": "Chaves e segredos embutidos no código-fonte, fáceis de extrair.",
+      "when_it_occurs": [
+        "Segredos presentes em repositórios ou binários"
+      ],
+      "how_to_identify": [
+        "Scans de código que encontram strings sensíveis"
+      ],
+      "how_to_prevent": [
+        "Utilizar KMS/Vault",
+        "Remover segredos do código"
+      ],
+      "qual_o_risco": [
+        "Acesso não autorizado a sistemas"
+      ]
+    },
+    "VAULT-04": {
+      "name": "Insufficient Logging (O Registro Apagado)",
+      "technical_description": "Falta de trilhas de auditoria que permitam investigar ações sensíveis.",
+      "when_it_occurs": [
+        "Operações críticas não logadas ou logs facilmente apagáveis"
+      ],
+      "how_to_identify": [
+        "Ausência de evidências durante investigações"
+      ],
+      "how_to_prevent": [
+        "Implementar logs de auditoria imutáveis",
+        "Centralizar logs com retenção definida"
+      ],
+      "qual_o_risco": [
+        "Impossibilidade de atribuição de ações maliciosas"
+      ]
+    },
+    "VAULT-05": {
+      "name": "Replay Attack (A Profecia Reutilizada)",
+      "technical_description": "Reuso de tokens ou mensagens válidas para realizar ações indevidas.",
+      "when_it_occurs": [
+        "Tokens reutilizáveis sem nonce ou controle de estado"
+      ],
+      "how_to_identify": [
+        "Requisições repetidas com mesmo token que produzem efeitos"
+      ],
+      "how_to_prevent": [
+        "Utilizar nonces e tokens de uso único",
+        "Verificação de timestamps"
+      ],
+      "qual_o_risco": [
+        "Ações repetidas não autorizadas"
+      ]
+    },
+    "VAULT-06": {
+      "name": "Insecure Direct Object Reference (O Cofre Sem Tranca)",
+      "technical_description": "Acesso direto a objetos sensíveis via identificadores previsíveis ou não validados.",
+      "when_it_occurs": [
+        "Falta de verificação de autorização por objeto"
+      ],
+      "how_to_identify": [
+        "Acesso a recursos de outros usuários alterando parâmetros de URL"
+      ],
+      "how_to_prevent": [
+        "Verificar autorização em cada acesso a objetos",
+        "Usar identificadores não previsíveis"
+      ],
+      "qual_o_risco": [
+        "Exposição de dados de outros usuários"
+      ]
+    },
+    "INFRA-01": {
+      "name": "Exposed Ports (O Túnel dos Construtores)",
+      "technical_description": "Serviços e portas expostos indevidamente à internet, como SSH sem proteção.",
+      "when_it_occurs": [
+        "Regras de firewall permissivas"
+      ],
+      "how_to_identify": [
+        "Scan de portas públicas revelando serviços internos"
+      ],
+      "how_to_prevent": [
+        "Hardening de rede",
+        "Restringir acesso via VPN/ACLs"
+      ],
+      "qual_o_risco": [
+        "Acesso não autorizado à infraestrutura"
+      ]
+    },
+    "INFRA-02": {
+      "name": "Lack of WAF (O Portão Sem Sentinela)",
+      "technical_description": "Ausência de filtragem e inspeção de tráfego que permita detectar tentativas de ataque.",
+      "when_it_occurs": [
+        "Tráfego não inspecionado chegando a aplicações"
+      ],
+      "how_to_identify": [
+        "Tráfego malicioso passando sem bloqueio"
+      ],
+      "how_to_prevent": [
+        "Implementar WAF"
+      ],
+      "qual_o_risco": [
+        "Exploração de vulnerabilidades via tráfego malicioso"
+      ]
+    },
+    "INFRA-03": {
+      "name": "Lateral Movement (A Confiança Cega)",
+      "technical_description": "Falta de segmentação que permite movimento lateral dentro da rede após comprometimento.",
+      "when_it_occurs": [
+        "Nenhuma microsegmentação interna"
+      ],
+      "how_to_identify": [
+        "Acesso a recursos internos a partir de máquinas comprometidas"
+      ],
+      "how_to_prevent": [
+        "Implementar Zero Trust",
+        "Segmentação de rede"
+      ],
+      "qual_o_risco": [
+        "Escalada de comprometimento interno"
+      ]
+    },
+    "INFRA-04": {
+      "name": "DDoS (O Cerco de Flechas)",
+      "technical_description": "Ataques massivos que esgotam recursos e impedem serviço normal.",
+      "when_it_occurs": [
+        "Picos de tráfego malicioso direcionado"
+      ],
+      "how_to_identify": [
+        "Aumento súbito no tráfego e erros de timeout"
+      ],
+      "how_to_prevent": [
+        "Mitigação de DDoS via CDN/equilibradores",
+        "Rate limiting"
+      ],
+      "qual_o_risco": [
+        "Interrupção prolongada do serviço"
+      ]
+    },
+    "INFRA-05": {
+      "name": "DNS Spoofing (O Vigia Corrompido)",
+      "technical_description": "Redirecionamento de tráfego devido à manipulação de DNS ou caches corrompidos.",
+      "when_it_occurs": [
+        "Falta de proteção de DNS como DNSSEC"
+      ],
+      "how_to_identify": [
+        "Resolução de nomes apontando para IPs suspeitos"
+      ],
+      "how_to_prevent": [
+        "Usar DNSSEC",
+        "Monitoramento de integridade DNS"
+      ],
+      "qual_o_risco": [
+        "Sequestro de tráfego e phishing"
+      ]
+    },
+    "INFRA-06": {
+      "name": "Memory Leak (A Muralha Desmoronando)",
+      "technical_description": "Consumo gradual de recursos que pode levar a falhas e indisponibilidade.",
+      "when_it_occurs": [
+        "Processos consumindo memória ao longo do tempo"
+      ],
+      "how_to_identify": [
+        "Monitoração mostrando crescimento contínuo de memória"
+      ],
+      "how_to_prevent": [
+        "Monitoramento de recursos",
+        "Perfis de performance e correções de leaks"
+      ],
+      "qual_o_risco": [
+        "Interrupção do serviço"
+      ]
+    },
+    "FRONT-01": {
+      "name": "Reflected XSS (A Maldição do Espelho)",
+      "technical_description": "Script malicioso refletido em respostas por falta de sanitização.",
+      "when_it_occurs": [
+        "Entrada do usuário refletida em HTML sem escape"
+      ],
+      "how_to_identify": [
+        "Execução de scripts após submissão de payloads maliciosos"
+      ],
+      "how_to_prevent": [
+        "Sanitização e escape de inputs",
+        "Uso de frameworks com binding seguro"
+      ],
+      "qual_o_risco": [
+        "Hijacking de sessão e roubo de dados do usuário"
+      ]
+    },
+    "FRONT-02": {
+      "name": "Clickjacking (O Vidro Invisível)",
+      "technical_description": "Sobreposição invisível que faz o usuário clicar em elementos indesejados.",
+      "when_it_occurs": [
+        "Páginas permitidas em iframes externos sem proteção"
+      ],
+      "how_to_identify": [
+        "UI estranho ou cliques inesperados relatados pelos usuários"
+      ],
+      "how_to_prevent": [
+        "Usar X-Frame-Options ou CSP frame-ancestors"
+      ],
+      "qual_o_risco": [
+        "Ações não autorizadas executadas pelo usuário"
+      ]
+    },
+    "FRONT-03": {
+      "name": "Phishing / Social Engineering (O Bardo Impostor)",
+      "technical_description": "Engenharia social que induz usuários a fornecer credenciais ou executar ações.",
+      "when_it_occurs": [
+        "Campanhas de phishing bem sucedidas"
+      ],
+      "how_to_identify": [
+        "Relatos de usuários e padrões de envio de credenciais"
+      ],
+      "how_to_prevent": [
+        "Educação de usuários",
+        "Implementar MFA"
+      ],
+      "qual_o_risco": [
+        "Comprometimento de contas"
+      ]
+    },
+    "FRONT-04": {
+      "name": "DOM-based XSS (O Pergaminho de Outras Terras)",
+      "technical_description": "Scripts executados no navegador por manipulação do DOM com dados inseguros.",
+      "when_it_occurs": [
+        "Uso inseguro de window.location ou innerHTML"
+      ],
+      "how_to_identify": [
+        "Payloads que alteram o DOM e executam código"
+      ],
+      "how_to_prevent": [
+        "Validar dados de fontes como window.location e localStorage",
+        "Evitar innerHTML sem sanitização"
+      ],
+      "qual_o_risco": [
+        "Execução de código malicioso no cliente"
+      ]
+    },
+    "FRONT-05": {
+      "name": "Open Redirect (A Estrada de Falsa Direção)",
+      "technical_description": "Redirecionamentos não validados que podem levar usuários a sites maliciosos.",
+      "when_it_occurs": [
+        "Parâmetros de redirecionamento aceitos sem validação"
+      ],
+      "how_to_identify": [
+        "URLs de redirecionamento apontando para domínios externos não confiáveis"
+      ],
+      "how_to_prevent": [
+        "Validar destinos de redirecionamento",
+        "Usar allowlist de domínios"
+      ],
+      "qual_o_risco": [
+        "Phishing e perda de confiança do usuário"
+      ]
+    },
+    "SUPPLY-01": {
+      "name": "Vulnerable Dependencies (O Tempero Envenenado)",
+      "technical_description": "Dependências com vulnerabilidades conhecidas que podem comprometer o sistema.",
+      "when_it_occurs": [
+        "Uso de bibliotecas desatualizadas ou não avaliadas"
+      ],
+      "how_to_identify": [
+        "SCA mostrando vulnerabilidades em pacotes usados"
+      ],
+      "how_to_prevent": [
+        "Análise SCA",
+        "Atualizar dependências"
+      ],
+      "qual_o_risco": [
+        "Execução de código malicioso via dependência vulnerável"
+      ]
+    },
+    "SUPPLY-02": {
+      "name": "Typosquatting (O Nome Quase Igual)",
+      "technical_description": "Pacotes maliciosos com nomes semelhantes a pacotes legítimos que podem ser instalados por engano.",
+      "when_it_occurs": [
+        "Instalação automatizada de dependências sem validação de integridade"
+      ],
+      "how_to_identify": [
+        "Pacotes com nomes suspeitos ou diferenças sutis"
+      ],
+      "how_to_prevent": [
+        "Verificar hashes e origem das dependências"
+      ],
+      "qual_o_risco": [
+        "Introdução de código malicioso no build"
+      ]
+    },
+    "SUPPLY-03": {
+      "name": "Insider Threat / Untrusted Plugin (O Escravo nas Cozinhas)",
+      "technical_description": "Código de terceiros ou insiders com privilégios excessivos que causam danos.",
+      "when_it_occurs": [
+        "Integrações de terceiros com acesso amplo"
+      ],
+      "how_to_identify": [
+        "Comportamento anômalo vindo de componentes de terceiros"
+      ],
+      "how_to_prevent": [
+        "Princípio do menor privilégio para integrações"
+      ],
+      "qual_o_risco": [
+        "Comprometimento interno via componente malicioso"
+      ]
+    },
+    "SUPPLY-04": {
+      "name": "Data Exfiltration (A Receita Roubada)",
+      "technical_description": "Exfiltração de segredos ou propriedade intelectual via terceiros.",
+      "when_it_occurs": [
+        "Acesso e cópia não autorizada de segredos por terceiros"
+      ],
+      "how_to_identify": [
+        "Acesso incomum a repositórios ou segredos"
+      ],
+      "how_to_prevent": [
+        "Monitorar acesso a segredos",
+        "Controlar permissões de terceiros"
+      ],
+      "qual_o_risco": [
+        "Exposição de propriedade intelectual"
+      ]
+    },
+    "SUPPLY-05": {
+      "name": "Subverted Build Process (A Espada de Vidro)",
+      "technical_description": "Injeção de código malicioso durante o build que afeta artifacts entregues.",
+      "when_it_occurs": [
+        "Pipelines de CI/CD sem verificações de integridade"
+      ],
+      "how_to_identify": [
+        "Diferenças entre código fonte e binários gerados"
+      ],
+      "how_to_prevent": [
+        "Garantir integridade do pipeline de CI/CD",
+        "Verificar assinaturas e hashes"
+      ],
+      "qual_o_risco": [
+        "Entrega de código malicioso em produção"
+      ]
+    },
+    "LOGIC-01": {
+      "name": "Race Condition (O Duelo Simultâneo)",
+      "technical_description": "Condições de corrida que permitem estados inconsistentes ou exploração de tempo.",
+      "when_it_occurs": [
+        "Acesso concorrente a recursos compartilhados sem sincronização"
+      ],
+      "how_to_identify": [
+        "Testes de concorrência revelando comportamentos inesperados"
+      ],
+      "how_to_prevent": [
+        "Locks atômicos",
+        "Sincronização adequada"
+      ],
+      "qual_o_risco": [
+        "Corrupção de dados"
+      ]
+    },
+    "LOGIC-02": {
+      "name": "Business Logic Flaw (O Imposto Negativo)",
+      "technical_description": "Falhas nas regras de negócio que permitem resultados incorretos ou abusos.",
+      "when_it_occurs": [
+        "Validações de negócio insuficientes"
+      ],
+      "how_to_identify": [
+        "Testes de casos de borda e simulações de fluxo de negócio"
+      ],
+      "how_to_prevent": [
+        "Validação rigorosa de regras de negócio"
+      ],
+      "qual_o_risco": [
+        "Perdas financeiras"
+      ]
+    },
+    "LOGIC-03": {
+      "name": "Resource Exhaustion (O Pedido Infinito)",
+      "technical_description": "Solicitações que consomem recursos sem controle, causando queda do serviço.",
+      "when_it_occurs": [
+        "Solicitações massivas sem paginação"
+      ],
+      "how_to_identify": [
+        "Picos de uso de recursos associados a certas requisições"
+      ],
+      "how_to_prevent": [
+        "Paginação",
+        "Limites de taxa"
+      ],
+      "qual_o_risco": [
+        "Indisponibilidade do serviço"
+      ]
+    },
+    "LOGIC-04": {
+      "name": "Replay / Business Validation (O Cupom Infinito)",
+      "technical_description": "Reuso indevido de autorizações ou falha em validar estado de transações.",
+      "when_it_occurs": [
+        "Ausência de verificação de unicidade ou estado"
+      ],
+      "how_to_identify": [
+        "Transações duplicadas sendo aceitas"
+      ],
+      "how_to_prevent": [
+        "Validar unicidade de transações e cupons"
+      ],
+      "qual_o_risco": [
+        "Fraude financeira"
+      ]
+    },
+    "LOGIC-05": {
+      "name": "Slowloris / Timeout Flaw (O Escrivão Impaciente)",
+      "technical_description": "Exploração de timeouts e conexões mantidas abertas para esgotar servidores.",
+      "when_it_occurs": [
+        "Conexões mantidas abertas sem limites"
+      ],
+      "how_to_identify": [
+        "Grande número de conexões parcialmente abertas"
+      ],
+      "how_to_prevent": [
+        "Configurar timeouts agressivos",
+        "Limitar conexões simultâneas"
+      ],
+      "qual_o_risco": [
+        "Negação de serviço parcial ou total"
+      ]
+    },
+    "MON-01": {
+      "name": "Lack of Alerting (O Nevoeiro da Batalha)",
+      "technical_description": "Falha em gerar alertas em tempo real que indiquem incidentes.",
+      "when_it_occurs": [
+        "Alertas não configurados para erros críticos"
+      ],
+      "how_to_identify": [
+        "Incidentes não detectados por sistemas de monitoramento"
+      ],
+      "how_to_prevent": [
+        "Implementar alertas em tempo real",
+        "Monitoramento de anomalias"
+      ],
+      "qual_o_risco": [
+        "Resposta tardia a incidentes"
+      ]
+    },
+    "MON-02": {
+      "name": "Log Injection (O Livro de Registros Falsos)",
+      "technical_description": "Inserção de conteúdo malicioso em logs que pode poluir ou manipular registros.",
+      "when_it_occurs": [
+        "Dados do usuário gravados em logs sem sanitização"
+      ],
+      "how_to_identify": [
+        "Presença de caracteres de controle ou entradas suspeitas em logs"
+      ],
+      "how_to_prevent": [
+        "Sanitizar dados antes de gravar nos logs"
+      ],
+      "qual_o_risco": [
+        "Dificultar investigações e forjar evidências"
+      ]
+    },
+    "MON-03": {
+      "name": "Log Flooding (A Sentinela de Pedra)",
+      "technical_description": "Geração excessiva de logs inúteis que enchem armazenamento e escondem eventos relevantes.",
+      "when_it_occurs": [
+        "Nivelamento de log muito verboso sem controle"
+      ],
+      "how_to_identify": [
+        "Taxas de log anormalmente altas"
+      ],
+      "how_to_prevent": [
+        "Configurar níveis de log e retenção automática"
+      ],
+      "qual_o_risco": [
+        "Perda de visibilidade e disco cheio"
+      ]
+    },
+    "MON-04": {
+      "name": "Monitoring Tampering (O Espelho de Vigilância Quebrado)",
+      "technical_description": "Atacante altera ou desativa monitoramento, fazendo com que alertas não sejam disparados.",
+      "when_it_occurs": [
+        "Acesso indevido a sistemas de monitoramento"
+      ],
+      "how_to_identify": [
+        "Falhas em métricas críticas sem correspondência em eventos reais"
+      ],
+      "how_to_prevent": [
+        "Proteger infraestrutura de monitoramento com MFA e segregação"
+      ],
+      "qual_o_risco": [
+        "Perda completa de capacidade de detecção"
+      ]
+    }
+  }
+}

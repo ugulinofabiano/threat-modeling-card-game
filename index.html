@@ -1,0 +1,161 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Threat Modeling Master: O Reino Seguro</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🛡️</text></svg>">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family=Inter:wght@300;400;600&family=Spectral:ital,wght@0,400;0,700;1,400&display=swap');
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #050508;
+            color: #d4c3a1;
+            overflow-x: hidden;
+            background-image: 
+                radial-gradient(circle at 50% 50%, rgba(20, 15, 10, 0.4) 0%, rgba(5, 5, 8, 0.95) 80%),
+                url('https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&q=80&w=1920');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+        }
+        
+        h1, h2, h3, .medieval-font {
+            font-family: 'Cinzel', serif;
+            letter-spacing: 0.05em;
+        }
+        
+        .medieval-font-alt {
+            font-family: 'Spectral', serif;
+        }
+        
+        .gold-glow {
+            text-shadow: 0 0 10px rgba(183, 149, 11, 0.5), 0 0 20px rgba(183, 149, 11, 0.2);
+        }
+        
+        .parchment {
+            background-color: #d4c3a1;
+            background-image: url('https://www.transparenttextures.com/patterns/natural-paper.png');
+            color: #1a0f0a;
+            box-shadow: inset 0 0 40px rgba(0,0,0,0.2), 0 10px 30px rgba(0,0,0,0.5);
+        }
+        
+        .stone-panel {
+            background: linear-gradient(145deg, #1a1a1a, #0d0d0d);
+            border: 2px solid rgba(183, 149, 11, 0.15);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.8), inset 0 1px 1px rgba(255,255,255,0.05);
+        }
+        
+        .card-pedestal {
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            background: linear-gradient(to bottom, rgba(26, 15, 10, 0.8), rgba(10, 5, 0, 0.95));
+            border: 1px solid rgba(183, 149, 11, 0.2);
+        }
+        
+        .card-pedestal:hover {
+            transform: translateY(-10px);
+            border-color: rgba(183, 149, 11, 0.6);
+            box-shadow: 0 15px 45px rgba(183, 149, 11, 0.2);
+        }
+        
+        .perspective-1000 { perspective: 1500px; }
+        
+        .preserve-3d { transform-style: preserve-3d; }
+        
+        .flip-card-inner {
+            transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+            transform-style: preserve-3d;
+        }
+        
+        .rotate-y-180 {
+            transform: rotateY(180deg);
+        }
+        
+        .custom-scrollbar::-webkit-scrollbar { width: 4px; }
+        
+        .custom-scrollbar::-webkit-scrollbar-track { background: rgba(0,0,0,0.3); }
+        
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #b7950b; border-radius: 2px; }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .animate-fadeIn {
+            animation: fadeIn 0.8s ease-out forwards;
+        }
+        
+        @keyframes cardEnter {
+            from { opacity: 0; transform: scale(0.8) translateY(50px); }
+            to { opacity: 1; transform: scale(1) translateY(0); }
+        }
+        
+        .animate-cardEnter {
+            animation: cardEnter 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+        }
+        
+        @keyframes flicker {
+          0% { opacity: 0.8; }
+          50% { opacity: 1; transform: scale(1.02); }
+          100% { opacity: 0.8; }
+        }
+        
+        .flame-effect {
+          animation: flicker 0.3s infinite;
+        }
+        
+        .vignette {
+            position: fixed;
+            inset: 0;
+            background: radial-gradient(circle, transparent 20%, rgba(0,0,0,0.8) 100%);
+            pointer-events: none;
+            z-index: 10;
+        }
+        
+        .divider-gold {
+            height: 1px;
+            background: linear-gradient(90deg, transparent, #b7950b, transparent);
+            opacity: 0.4;
+        }
+        
+        /* Markdown Styles */
+        
+        .markdown-content h1, .markdown-content h2, .markdown-content h3 { font-family: 'Cinzel', serif; font-weight: bold; margin-top: 1rem; margin-bottom: 0.5rem; }
+        
+        .markdown-content p { margin-bottom: 0.75rem; }
+        
+        .markdown-content strong { color: #b7950b; font-weight: 800; }
+        
+        .markdown-content ul { list-style-type: square; padding-left: 1.5rem; margin-bottom: 1rem; }
+        
+        .markdown-content li { margin-bottom: 0.25rem; }
+    </style>
+
+<script type="importmap">
+{
+  "imports": {
+    "react": "https://esm.sh/react@^19.2.3",
+    "react-dom/": "https://esm.sh/react-dom@^19.2.3/",
+    "react/": "https://esm.sh/react@^19.2.3/",
+    "@google/genai": "https://esm.sh/@google/genai@^1.34.0",
+    "recharts": "https://esm.sh/recharts@^3.6.0",
+    "marked": "https://esm.sh/marked@^12.0.0",
+    "vite": "https://esm.sh/vite@^7.3.0",
+    "@vitejs/plugin-react": "https://esm.sh/@vitejs/plugin-react@^5.1.2",
+    "path": "https://esm.sh/path@^0.12.7",
+    "url": "https://esm.sh/url@^0.11.4"
+  }
+}
+</script>
+  <script type="module" crossorigin src="/threat-modeling-card-game/assets/index-CrGaNi6j.js"></script>
+  <link rel="stylesheet" crossorigin href="/threat-modeling-card-game/assets/index-DUTlV2-t.css">
+</head>
+<body>
+    <div class="vignette"></div>
+    <div id="root"></div>
+</body>
+</html>
