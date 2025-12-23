@@ -2,7 +2,7 @@
   "security_details": {
     "AUTH-01": {
       "name": "Credential Stuffing",
-      "technical_description": "Um exército de espectros automatizados tenta forçar os selos dos portões usando chaves roubadas de outros reinos.",
+      "technical_description": "Ataques automatizados que reutilizam credenciais vazadas (usuário/senha) para realizar tentativas massivas de autenticação quando o sistema não implementa proteções contra força bruta, rate limiting, verificação de IP/fingerprint ou MFA.",
       "when_it_occurs": [
         "Quando o sistema não possui MFA obrigatório",
         "Quando não há limitação de tentativas por IP, ASN ou fingerprint de dispositivo"
@@ -23,7 +23,7 @@
 
     "AUTH-02": {
       "name": "Session Hijacking",
-      "technical_description": "Um cavaleiro deixou o posto, mas sua sombra continua ativa, permitindo que impostores ajam em seu nome.",
+      "technical_description": "Comprometimento de sessão que ocorre quando tokens de sessão podem ser roubados, preditos ou reutilizados devido à falta de flags seguras em cookies, expiração adequada, rotação de tokens ou invalidação no logout.",
       "when_it_occurs": [
         "Tokens de sessão sem expiração adequada",
         "Ausência de invalidação após logout"
@@ -43,7 +43,7 @@
 
     "auth-03": {
       "name": "User Enumeration",
-      "technical_description": "O guardião do portão revela se um nome está na lista real antes mesmo de pedir a senha.",
+      "technical_description": "Diferenças em respostas (mensagens de erro, códigos HTTP ou tempos de resposta) que permitem confirmar a existência de contas de usuário, facilitando a enumeração de usuários para ataques subsequentes como brute force e credential stuffing.",
       "when_it_occurs": [
         "Mensagens de erro distintas para usuário inexistente e senha incorreta",
         "Diferenças de tempo causadas por hash de senha"
@@ -63,7 +63,7 @@
 
     "AUTH-04": {
       "name": "Weak JWT Secret",
-      "technical_description": "Os decretos reais são selados com cera comum que pode ser derretida e refeita por qualquer falsificador.",
+      "technical_description": "Uso de segredos simétricos fracos ou mal gerenciados para assinar tokens (ex.: HS256 com chaves curtas) ou exposição de chaves no código, permitindo que um atacante forge ou invalide tokens JWT.",
       "when_it_occurs": [
         "Uso de HS256 com segredos curtos",
         "Segredos versionados no código"
@@ -83,7 +83,7 @@
 
     "AUTH-05": {
       "name": "Default Credentials",
-      "technical_description": "Uma pequena porta usada pelos servos durante a construção nunca foi trancada após o término da obra.",
+      "technical_description": "Instâncias, serviços ou dispositivos com credenciais padrão (usuário/senha) inalteradas após deploy, permitindo acesso não autorizado se essas credenciais forem conhecidas ou escaneadas.",
       "when_it_occurs": [
         "Deploy rápido sem hardening",
         "Ambientes esquecidos (dev/test)"
@@ -103,7 +103,7 @@
 
     "AUTH-06": {
       "name": "Token Forgery",
-      "technical_description": "Um plebeu usa um amuleto que imita o brilho do sangue real para acessar áreas restritas do castelo.",
+      "technical_description": "Possibilidade de forjar ou manipular tokens de autenticação quando o servidor não valida algoritmos, assinaturas, ou aceita tokens sem verificar integridade e origem, permitindo impersonation.",
       "when_it_occurs": [
         "Não validação de assinatura",
         "Confiança excessiva em dados do cliente"
@@ -122,7 +122,7 @@
 
     "AUTH-07": {
       "name": "Authentication DoS",
-      "technical_description": "Um feitiço faz o vigia dormir se ele for questionado muitas vezes seguidas pela mesma pessoa.",
+      "technical_description": "Mecanismos de autenticação que podem ser abusados para causar negação de serviço (ex.: bloqueio de contas por tentativas de login originadas por atacantes, ou consumo excessivo de recursos no fluxo de autenticação).",
       "when_it_occurs": [
         "Bloqueio rígido de contas",
         "Ausência de rate limiting inteligente"
@@ -141,7 +141,7 @@
 
     "API-01": {
       "name": "Mass Assignment",
-      "technical_description": "Um mercador envia campos extras no manifesto e o escrivão atualiza propriedades que não deveria.",
+      "technical_description": "Mapeamento direto do corpo da requisição para objetos de domínio sem filtrar campos (mass assignment) permite que um cliente defina propriedades sensíveis (ex.: isAdmin, balance) que deveriam ser protegidas pelo servidor.",
       "when_it_occurs": [
         "Uso direto de modelos de domínio em APIs",
         "Falta de validação de payload"
@@ -160,7 +160,7 @@
 
     "API-02": {
       "name": "SSRF (O Mensageiro Iludido)",
-      "technical_description": "O mensageiro real é convencido a entregar uma carta dentro do próprio castelo por um inimigo externo (SSRF).",
+      "technical_description": "Server-Side Request Forgery: servidor realiza requisições HTTP/URL controladas pelo usuário para destinos internos ou externos, potencialmente acessando serviços internos não expostos ou informações sensíveis.",
       "when_it_occurs": [
         "Servidor faz requisições a URLs controladas por usuário"
       ],
@@ -179,7 +179,7 @@
 
     "API-03": {
       "name": "Injection (O Envenenamento da Fonte)",
-      "technical_description": "Um inimigo insere comandos maliciosos que alteram queries ou comandos (Injection).",
+      "technical_description": "Injeção de comandos ou queries (SQL, NoSQL, OS, LDAP, etc.) causada por uso não parametrizado de entradas do usuário em consultas ou comandos, podendo levar a execução arbitrária, exfiltração ou corrupção de dados.",
       "when_it_occurs": [
         "Entrada do usuário usada diretamente em consultas ou comandos sem parametrização"
       ],
@@ -198,7 +198,7 @@
 
     "API-04": {
       "name": "Denial of Service (O Bloqueio das Estradas)",
-      "technical_description": "Tantas requisições vazias são enviadas que recursos legítimos ficam indisponíveis.",
+      "technical_description": "Exaustão de recursos do serviço (CPU, memória, conexões) por tráfego malicioso ou inputs malformados quando não há controles de rate limiting, validação ou mitigação de abuso.",
       "when_it_occurs": [
         "Picos de tráfego maliciosos ou malformados sem mitigação"
       ],
@@ -216,7 +216,7 @@
 
     "API-05": {
       "name": "Verbose Error Messages (A Fofoca dos Alquimistas)",
-      "technical_description": "Mensagens de erro ou logs que revelam detalhes técnicos sensíveis.",
+      "technical_description": "Exposição de informações internas através de mensagens de erro, stack traces ou logs expostos que podem revelar caminhos de arquivos, queries, versões de software e detalhes que auxiliam na exploração.",
       "when_it_occurs": [
         "Erros expostos ao usuário com stack traces ou dados sensíveis"
       ],
@@ -234,7 +234,7 @@
 
     "API-06": {
       "name": "Malicious File Upload (O Cavalo de Troia)",
-      "technical_description": "Upload de arquivos que contêm código malicioso ou exploram falhas no processamento de arquivos.",
+      "technical_description": "Processamento inseguro de uploads permitindo que arquivos com conteúdo malicioso (scripts, executáveis) ou metadados manipulados provoquem execução de código, overwriting de paths ou exposição de dados.",
       "when_it_occurs": [
         "Aceitação de uploads sem validação de tipo/tamanho/conteúdo"
       ],
@@ -253,7 +253,7 @@
 
     "VAULT-01": {
       "name": "Plaintext Storage (O Cofre de Cristal)",
-      "technical_description": "Dados sensíveis armazenados sem criptografia, visíveis a quem acessa o armazenamento.",
+      "technical_description": "Armazenamento de dados sensíveis (segredos, PII) em texto simples ou sem criptografia adequada em repouso, permitindo exposição em caso de acesso ao armazenamento ou backup.",
       "when_it_occurs": [
         "Armazenamento de segredos ou PII sem criptografia"
       ],
@@ -271,7 +271,7 @@
 
     "VAULT-02": {
       "name": "Logging PII (O Eco do Bardo)",
-      "technical_description": "Gravação de dados pessoais identificáveis em logs acessíveis.",
+      "technical_description": "Registro de informações pessoais identificáveis (PII) ou segredos em logs sem mascaramento, que pode levar à exposição de dados sensíveis por acesso a sistemas de logs.",
       "when_it_occurs": [
         "Aplicação registra PII em logs sem mascaramento"
       ],
@@ -288,7 +288,7 @@
 
     "VAULT-03": {
       "name": "Hardcoded Keys (A Chave Debaixo do Tapete)",
-      "technical_description": "Chaves e segredos embutidos no código-fonte, fáceis de extrair.",
+      "technical_description": "Segredos (API keys, chaves privadas) incorporados no código-fonte ou em repositórios, tornando-os acessíveis a qualquer pessoa com acesso ao repositório ou ao binário que contenha o segredo.",
       "when_it_occurs": [
         "Segredos presentes em repositórios ou binários"
       ],
@@ -306,7 +306,7 @@
 
     "VAULT-04": {
       "name": "Insufficient Logging (O Registro Apagado)",
-      "technical_description": "Falta de trilhas de auditoria que permitam investigar ações sensíveis.",
+      "technical_description": "Ausência de registros de auditoria confiáveis para ações críticas, dificultando investigação, correlação de eventos e atribuição de responsabilidade após incidentes.",
       "when_it_occurs": [
         "Operações críticas não logadas ou logs facilmente apagáveis"
       ],
@@ -324,7 +324,7 @@
 
     "VAULT-05": {
       "name": "Replay Attack (A Profecia Reutilizada)",
-      "technical_description": "Reuso de tokens ou mensagens válidas para realizar ações indevidas.",
+      "technical_description": "Reaproveitamento (replay) de tokens, mensagens ou requisições válidas quando não existem mecanismos de proteção (nonces, timestamps, identificação única), permitindo reexecução de operações críticas.",
       "when_it_occurs": [
         "Tokens reutilizáveis sem nonce ou controle de estado"
       ],
@@ -342,7 +342,7 @@
 
     "VAULT-06": {
       "name": "Insecure Direct Object Reference (O Cofre Sem Tranca)",
-      "technical_description": "Acesso direto a objetos sensíveis via identificadores previsíveis ou não validados.",
+      "technical_description": "Acesso a recursos de outros usuários através de identificadores previsíveis ou manipuláveis (IDOR) sem verificação de autorização por objeto, permitindo leitura ou modificação não autorizada.",
       "when_it_occurs": [
         "Falta de verificação de autorização por objeto"
       ],
@@ -360,7 +360,7 @@
 
     "INFRA-01": {
       "name": "Exposed Ports (O Túnel dos Construtores)",
-      "technical_description": "Serviços e portas expostos indevidamente à internet, como SSH sem proteção.",
+      "technical_description": "Serviços de infraestrutura (SSH, bancos, painéis de administração) expostos à Internet sem restrição, permitindo descoberta e exploração por atacantes.",
       "when_it_occurs": [
         "Regras de firewall permissivas"
       ],
@@ -378,7 +378,7 @@
 
     "INFRA-02": {
       "name": "Lack of WAF (O Portão Sem Sentinela)",
-      "technical_description": "Ausência de filtragem e inspeção de tráfego que permita detectar tentativas de ataque.",
+      "technical_description": "Falta de um WAF ou filtragem de tráfego que detecte e bloqueie padrões de ataque conhecidos (SQLi, XSS, LFI, bots), aumentando a superfície de ataque da aplicação.",
       "when_it_occurs": [
         "Tráfego não inspecionado chegando a aplicações"
       ],
@@ -395,7 +395,7 @@
 
     "INFRA-03": {
       "name": "Lateral Movement (A Confiança Cega)",
-      "technical_description": "Falta de segmentação que permite movimento lateral dentro da rede após comprometimento.",
+      "technical_description": "Ausência de segmentação e controle de acesso na rede interna, permitindo que um invasor com acesso inicial mova-se lateralmente e comprometa outros sistemas internos.",
       "when_it_occurs": [
         "Nenhuma microsegmentação interna"
       ],
@@ -413,7 +413,7 @@
 
     "INFRA-04": {
       "name": "DDoS (O Cerco de Flechas)",
-      "technical_description": "Ataques massivos que esgotam recursos e impedem serviço normal.",
+      "technical_description": "Ataques distribuídos que visam esgotar recursos de rede, CPU ou memória do serviço, resultando em indisponibilidade quando não há mitigação DDoS ou capacidade de escalonamento.",
       "when_it_occurs": [
         "Picos de tráfego malicioso direcionado"
       ],
@@ -431,7 +431,7 @@
 
     "INFRA-05": {
       "name": "DNS Spoofing (O Vigia Corrompido)",
-      "technical_description": "Redirecionamento de tráfego devido à manipulação de DNS ou caches corrompidos.",
+      "technical_description": "Manipulação ou comprometimento do sistema de resolução DNS que redireciona tráfego para destinos não autorizados, possibilitando phishing, interceptação ou sequestro de tráfego.",
       "when_it_occurs": [
         "Falta de proteção de DNS como DNSSEC"
       ],
@@ -449,7 +449,7 @@
 
     "INFRA-06": {
       "name": "Memory Leak (A Muralha Desmoronando)",
-      "technical_description": "Consumo gradual de recursos que pode levar a falhas e indisponibilidade.",
+      "technical_description": "Vazamentos de memória ou recursos em componentes da aplicação que, ao acumular, causam degradação de performance e eventual falha ou reinício do serviço.",
       "when_it_occurs": [
         "Processos consumindo memória ao longo do tempo"
       ],
@@ -467,7 +467,7 @@
 
     "FRONT-01": {
       "name": "Reflected XSS (A Maldição do Espelho)",
-      "technical_description": "Script malicioso refletido em respostas por falta de sanitização.",
+      "technical_description": "Execução de código JavaScript no contexto do usuário (reflected XSS) quando dados fornecidos pelo usuário são incluídos em respostas HTML sem validação ou escape, permitindo roubo de cookies ou ações em nome do usuário.",
       "when_it_occurs": [
         "Entrada do usuário refletida em HTML sem escape"
       ],
@@ -485,7 +485,7 @@
 
     "FRONT-02": {
       "name": "Clickjacking (O Vidro Invisível)",
-      "technical_description": "Sobreposição invisível que faz o usuário clicar em elementos indesejados.",
+      "technical_description": "Possibilidade de UI redressing (clickjacking) quando a aplicação pode ser embutida em iframes sem proteção, permitindo que um atacante induza cliques em controles sensíveis.",
       "when_it_occurs": [
         "Páginas permitidas em iframes externos sem proteção"
       ],
@@ -502,7 +502,7 @@
 
     "FRONT-03": {
       "name": "Phishing / Social Engineering (O Bardo Impostor)",
-      "technical_description": "Engenharia social que induz usuários a fornecer credenciais ou executar ações.",
+      "technical_description": "Técnicas de engenharia social que visam enganar usuários para que revelem credenciais, tokens ou executem ações inseguras, frequentemente combinadas com páginas ou comunicações fraudulentas.",
       "when_it_occurs": [
         "Campanhas de phishing bem sucedidas"
       ],
@@ -520,7 +520,7 @@
 
     "FRONT-04": {
       "name": "DOM-based XSS (O Pergaminho de Outras Terras)",
-      "technical_description": "Scripts executados no navegador por manipulação do DOM com dados inseguros.",
+      "technical_description": "Vulnerabilidade de XSS baseada em DOM: manipulação insegura do DOM em código cliente usando dados não confiáveis (ex.: location, hash, innerHTML) que resulta em execução de scripts maliciosos no navegador.",
       "when_it_occurs": [
         "Uso inseguro de window.location ou innerHTML"
       ],
@@ -538,7 +538,7 @@
 
     "FRONT-05": {
       "name": "Open Redirect (A Estrada de Falsa Direção)",
-      "technical_description": "Redirecionamentos não validados que podem levar usuários a sites maliciosos.",
+      "technical_description": "Parâmetros de redirecionamento aceitos sem validação, permitindo que usuários sejam enviados a domínios externos controlados por atacantes, facilitando phishing e abuso de confiança.",
       "when_it_occurs": [
         "Parâmetros de redirecionamento aceitos sem validação"
       ],
@@ -556,7 +556,7 @@
 
     "SUPPLY-01": {
       "name": "Vulnerable Dependencies (O Tempero Envenenado)",
-      "technical_description": "Dependências com vulnerabilidades conhecidas que podem comprometer o sistema.",
+      "technical_description": "Uso de bibliotecas ou dependências com vulnerabilidades conhecidas que podem ser exploradas para execução remota de código, escalonamento de privilégios ou vazamento de dados.",
       "when_it_occurs": [
         "Uso de bibliotecas desatualizadas ou não avaliadas"
       ],
@@ -574,7 +574,7 @@
 
     "SUPPLY-02": {
       "name": "Typosquatting (O Nome Quase Igual)",
-      "technical_description": "Pacotes maliciosos com nomes semelhantes a pacotes legítimos que podem ser instalados por engano.",
+      "technical_description": "Risco de typosquatting onde pacotes maliciosos com nomes similares a pacotes legítimos são publicados e inadvertidamente instalados, introduzindo código malicioso no build ou runtime.",
       "when_it_occurs": [
         "Instalação automatizada de dependências sem validação de integridade"
       ],
@@ -591,7 +591,7 @@
 
     "SUPPLY-03": {
       "name": "Insider Threat / Untrusted Plugin (O Escravo nas Cozinhas)",
-      "technical_description": "Código de terceiros ou insiders com privilégios excessivos que causam danos.",
+      "technical_description": "Ameaças internas ou plugins não confiáveis com acesso amplo que podem exfiltrar dados, modificar comportamento do sistema ou inserir backdoors quando executados com privilégios elevados.",
       "when_it_occurs": [
         "Integrações de terceiros com acesso amplo"
       ],
@@ -608,7 +608,7 @@
 
     "SUPPLY-04": {
       "name": "Data Exfiltration (A Receita Roubada)",
-      "technical_description": "Exfiltração de segredos ou propriedade intelectual via terceiros.",
+      "technical_description": "Exfiltração de dados sensíveis por componentes ou terceiros que têm acesso a repositórios, buckets ou segredos sem controles adequados de privilégio e monitoramento.",
       "when_it_occurs": [
         "Acesso e cópia não autorizada de segredos por terceiros"
       ],
@@ -626,7 +626,7 @@
 
     "SUPPLY-05": {
       "name": "Subverted Build Process (A Espada de Vidro)",
-      "technical_description": "Injeção de código malicioso durante o build que afeta artifacts entregues.",
+      "technical_description": "Comprometimento do processo de build/CI que permite injetar código malicioso nos artefatos distribuídos, por ausência de verificações de integridade, hashes ou assinaturas dos builds.",
       "when_it_occurs": [
         "Pipelines de CI/CD sem verificações de integridade"
       ],
@@ -644,7 +644,7 @@
 
     "LOGIC-01": {
       "name": "Race Condition (O Duelo Simultâneo)",
-      "technical_description": "Condições de corrida que permitem estados inconsistentes ou exploração de tempo.",
+      "technical_description": "Condições de corrida em código concorrente que, sob acesso simultâneo, permitem que operações alterem estado de forma não atômica, levando a inconsistências, duplicações ou exploração de janela temporal.",
       "when_it_occurs": [
         "Acesso concorrente a recursos compartilhados sem sincronização"
       ],
@@ -662,7 +662,7 @@
 
     "LOGIC-02": {
       "name": "Business Logic Flaw (O Imposto Negativo)",
-      "technical_description": "Falhas nas regras de negócio que permitem resultados incorretos ou abusos.",
+      "technical_description": "Lacunas na validação de regras de negócio que permitem fluxos anômalos ou abusivos (ex.: bypass de pagamento, criação de crédito indevido) que não são detectados por validação técnica padrão.",
       "when_it_occurs": [
         "Validações de negócio insuficientes"
       ],
@@ -679,7 +679,7 @@
 
     "LOGIC-03": {
       "name": "Resource Exhaustion (O Pedido Infinito)",
-      "technical_description": "Solicitações que consomem recursos sem controle, causando queda do serviço.",
+      "technical_description": "Operações ou endpoints que permitem solicitações que consomem recursos em excesso (CPU, IO, memória) sem limites ou paginação, resultando em degradação ou queda do serviço.",
       "when_it_occurs": [
         "Solicitações massivas sem paginação"
       ],
@@ -697,7 +697,7 @@
 
     "LOGIC-04": {
       "name": "Replay / Business Validation (O Cupom Infinito)",
-      "technical_description": "Reuso indevido de autorizações ou falha em validar estado de transações.",
+      "technical_description": "Ausência de verificações de estado/unicidade em transações críticas, permitindo replays ou reutilização de autorizações (vouchers, cupons, tokens) para executar ações indevidas várias vezes.",
       "when_it_occurs": [
         "Ausência de verificação de unicidade ou estado"
       ],
@@ -714,7 +714,7 @@
 
     "LOGIC-05": {
       "name": "Slowloris / Timeout Flaw (O Escrivão Impaciente)",
-      "technical_description": "Exploração de timeouts e conexões mantidas abertas para esgotar servidores.",
+      "technical_description": "Abuso de timeouts e conexões mantidas (Slowloris-style) para esgotar o pool de conexões do servidor, levando a indisponibilidade se não houver limites e timeouts configurados.",
       "when_it_occurs": [
         "Conexões mantidas abertas sem limites"
       ],
@@ -732,7 +732,7 @@
 
     "MON-01": {
       "name": "Lack of Alerting (O Nevoeiro da Batalha)",
-      "technical_description": "Falha em gerar alertas em tempo real que indiquem incidentes.",
+      "technical_description": "Ausência de alertas ou thresholds configurados em métricas críticas, resultando em demora na detecção de incidentes e tempo de resposta inaceitável a eventos de segurança.",
       "when_it_occurs": [
         "Alertas não configurados para erros críticos"
       ],
@@ -750,7 +750,7 @@
 
     "MON-02": {
       "name": "Log Injection (O Livro de Registros Falsos)",
-      "technical_description": "Inserção de conteúdo malicioso em logs que pode poluir ou manipular registros.",
+      "technical_description": "Aceitação de dados não confiáveis em campos de log sem sanitização, permitindo injeção e manipulação de logs (log forging), o que dificulta investigações e pode camuflar atividades maliciosas.",
       "when_it_occurs": [
         "Dados do usuário gravados em logs sem sanitização"
       ],
@@ -767,7 +767,7 @@
 
     "MON-03": {
       "name": "Log Flooding (A Sentinela de Pedra)",
-      "technical_description": "Geração excessiva de logs inúteis que enchem armazenamento e escondem eventos relevantes.",
+      "technical_description": "Produção massiva de logs de baixo valor (log flooding) que consome espaço de armazenamento, aumenta custos e gera ruído que reduz a eficácia das ferramentas de detecção.",
       "when_it_occurs": [
         "Nivelamento de log muito verboso sem controle"
       ],
@@ -784,7 +784,7 @@
 
     "MON-04": {
       "name": "Monitoring Tampering (O Espelho de Vigilância Quebrado)",
-      "technical_description": "Atacante altera ou desativa monitoramento, fazendo com que alertas não sejam disparados.",
+      "technical_description": "Comprometimento ou adulteração dos sistemas de monitoramento e logging (desativação, alteração de regras) que impede a detecção de incidentes e a geração de evidências confiáveis.",
       "when_it_occurs": [
         "Acesso indevido a sistemas de monitoramento"
       ],

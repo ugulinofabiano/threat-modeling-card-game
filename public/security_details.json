@@ -1,8 +1,7 @@
-{
-  "security_details": {
+{ "security_details": {
     "AUTH-01": {
       "name": "Credential Stuffing",
-      "technical_description": "Um exército de espectros automatizados tenta forçar os selos dos portões usando chaves roubadas de outros reinos.",
+      "technical_description": "Ataques automatizados que reutilizam credenciais vazadas (usuário/senha) para realizar tentativas massivas de autenticação quando o sistema não implementa proteções contra força bruta, rate limiting, verificação de IP/fingerprint ou MFA.",
       "when_it_occurs": [
         "Quando o sistema não possui MFA obrigatório",
         "Quando não há limitação de tentativas por IP, ASN ou fingerprint de dispositivo"
@@ -23,7 +22,7 @@
 
     "AUTH-02": {
       "name": "Session Hijacking",
-      "technical_description": "Um cavaleiro deixou o posto, mas sua sombra continua ativa, permitindo que impostores ajam em seu nome.",
+      "technical_description": "Comprometimento de sessão que ocorre quando tokens de sessão podem ser roubados, preditos ou reutilizados devido à falta de flags seguras em cookies, expiração adequada, rotação de tokens ou invalidação no logout.",
       "when_it_occurs": [
         "Tokens de sessão sem expiração adequada",
         "Ausência de invalidação após logout"
@@ -43,7 +42,7 @@
 
     "auth-03": {
       "name": "User Enumeration",
-      "technical_description": "O guardião do portão revela se um nome está na lista real antes mesmo de pedir a senha.",
+      "technical_description": "Diferenças em respostas (mensagens de erro, códigos HTTP ou tempos de resposta) que permitem confirmar a existência de contas de usuário, facilitando a enumeração de usuários para ataques subsequentes como brute force e credential stuffing.",
       "when_it_occurs": [
         "Mensagens de erro distintas para usuário inexistente e senha incorreta",
         "Diferenças de tempo causadas por hash de senha"
@@ -63,7 +62,7 @@
 
     "AUTH-04": {
       "name": "Weak JWT Secret",
-      "technical_description": "Os decretos reais são selados com cera comum que pode ser derretida e refeita por qualquer falsificador.",
+      "technical_description": "Uso de segredos simétricos fracos ou mal gerenciados para assinar tokens (ex.: HS256 com chaves curtas) ou exposição de chaves no código, permitindo que um atacante forge ou invalide tokens JWT.",
       "when_it_occurs": [
         "Uso de HS256 com segredos curtos",
         "Segredos versionados no código"
@@ -83,7 +82,7 @@
 
     "AUTH-05": {
       "name": "Default Credentials",
-      "technical_description": "Uma pequena porta usada pelos servos durante a construção nunca foi trancada após o término da obra.",
+      "technical_description": "Instâncias, serviços ou dispositivos com credenciais padrão (usuário/senha) inalteradas após deploy, permitindo acesso não autorizado se essas credenciais forem conhecidas ou escaneadas.",
       "when_it_occurs": [
         "Deploy rápido sem hardening",
         "Ambientes esquecidos (dev/test)"
@@ -103,7 +102,7 @@
 
     "AUTH-06": {
       "name": "Token Forgery",
-      "technical_description": "Um plebeu usa um amuleto que imita o brilho do sangue real para acessar áreas restritas do castelo.",
+      "technical_description": "Possibilidade de forjar ou manipular tokens de autenticação quando o servidor não valida algoritmos, assinaturas, ou aceita tokens sem verificar integridade e origem, permitindo impersonation.",
       "when_it_occurs": [
         "Não validação de assinatura",
         "Confiança excessiva em dados do cliente"
@@ -122,7 +121,7 @@
 
     "AUTH-07": {
       "name": "Authentication DoS",
-      "technical_description": "Um feitiço faz o vigia dormir se ele for questionado muitas vezes seguidas pela mesma pessoa.",
+      "technical_description": "Mecanismos de autenticação que podem ser abusados para causar negação de serviço (ex.: bloqueio de contas por tentativas de login originadas por atacantes, ou consumo excessivo de recursos no fluxo de autenticação).",
       "when_it_occurs": [
         "Bloqueio rígido de contas",
         "Ausência de rate limiting inteligente"
@@ -141,7 +140,7 @@
 
     "API-01": {
       "name": "Mass Assignment",
-      "technical_description": "Um mercador envia campos extras no manifesto e o escrivão atualiza propriedades que não deveria.",
+      "technical_description": "Mapeamento direto do corpo da requisição para objetos de domínio sem filtrar campos (mass assignment) permite que um cliente defina propriedades sensíveis (ex.: isAdmin, balance) que deveriam ser protegidas pelo servidor.",
       "when_it_occurs": [
         "Uso direto de modelos de domínio em APIs",
         "Falta de validação de payload"
@@ -160,7 +159,7 @@
 
     "API-02": {
       "name": "SSRF (O Mensageiro Iludido)",
-      "technical_description": "O mensageiro real é convencido a entregar uma carta dentro do próprio castelo por um inimigo externo (SSRF).",
+      "technical_description": "Server-Side Request Forgery: servidor realiza requisições HTTP/URL controladas pelo usuário para destinos internos ou externos, potencialmente acessando serviços internos não expostos ou informações sensíveis.",
       "when_it_occurs": [
         "Servidor faz requisições a URLs controladas por usuário"
       ],
@@ -179,7 +178,7 @@
 
     "API-03": {
       "name": "Injection (O Envenenamento da Fonte)",
-      "technical_description": "Um inimigo insere comandos maliciosos que alteram queries ou comandos (Injection).",
+      "technical_description": "Injeção de comandos ou queries (SQL, NoSQL, OS, LDAP, etc.) causada por uso não parametrizado de entradas do usuário em consultas ou comandos, podendo levar a execução arbitrária, exfiltração ou corrupção de dados.",
       "when_it_occurs": [
         "Entrada do usuário usada diretamente em consultas ou comandos sem parametrização"
       ],
@@ -198,7 +197,7 @@
 
     "API-04": {
       "name": "Denial of Service (O Bloqueio das Estradas)",
-      "technical_description": "Tantas requisições vazias são enviadas que recursos legítimos ficam indisponíveis.",
+      "technical_description": "Exaustão de recursos do serviço (CPU, memória, conexões) por tráfego malicioso ou inputs malformados quando não há controles de rate limiting, validação ou mitigação de abuso.",
       "when_it_occurs": [
         "Picos de tráfego maliciosos ou malformados sem mitigação"
       ],
@@ -216,77 +215,7 @@
 
     "API-05": {
       "name": "Verbose Error Messages (A Fofoca dos Alquimistas)",
-      "technical_description": "Mensagens de erro ou logs que revelam detalhes técnicos sensíveis.",
-      "when_it_occurs": [
-        "Erros expostos ao usuário com stack traces ou dados sensíveis"
-      ],
-      "how_to_identify": [
-        "Mensagens de erro detalhadas visíveis em respostas públicas"
-      ],
-      "how_to_prevent": [
-        "Ocultar detalhes técnicos em mensagens de erro",
-        "Logar internamente com mascaramento"
-      ],
-      "qual_o_risco": [
-        "Exposição de informações internas que facilitam ataques"
-      ]
-    },
-
-    "API-06": {
-      "name": "Malicious File Upload (O Cavalo de Troia)",
-      "technical_description": "Upload de arquivos que contêm código malicioso ou exploram falhas no processamento de arquivos.",
-      "when_it_occurs": [
-        "Aceitação de uploads sem validação de tipo/tamanho/conteúdo"
-      ],
-      "how_to_identify": [
-        "Execução inesperada após upload ou uploads com extensões suspeitas"
-      ],
-      "how_to_prevent": [
-        "Validar tipos de arquivo",
-        "Escanear malware"
-      ],
-      "qual_o_risco": [
-        "Execução remota de código",
-        "Comprometimento do servidor"
-      ]
-    },
-
-    "VAULT-01": {
-      "name": "Plaintext Storage (O Cofre de Cristal)",
-      "technical_description": "Dados sensíveis armazenados sem criptografia, visíveis a quem acessa o armazenamento.",
-      "when_it_occurs": [
-        "Armazenamento de segredos ou PII sem criptografia"
-      ],
-      "how_to_identify": [
-        "Revisão de armazenamento mostrando dados em texto claro"
-      ],
-      "how_to_prevent": [
-        "Criptografar dados sensíveis em repouso",
-        "Gerenciar chaves com KMS"
-      ],
-      "qual_o_risco": [
-        "Exposição massiva de dados pessoais"
-      ]
-    },
-
-    "VAULT-02": {
-      "name": "Logging PII (O Eco do Bardo)",
-      "technical_description": "Gravação de dados pessoais identificáveis em logs acessíveis.",
-      "when_it_occurs": [
-        "Aplicação registra PII em logs sem mascaramento"
-      ],
-      "how_to_identify": [
-        "Análise de logs mostrando PII"
-      ],
-      "how_to_prevent": [
-        "Mascarar dados nos logs e auditoria"
-      ],
-      "qual_o_risco": [
-        "Vazamento de dados pessoais"
-      ]
-    },
-
-    "VAULT-03": {
+      "technical_description": "Exposição de informações internas através de mensagens de erro, stack traces ou logs expostos que podem revelar caminhos de arquivos, queries, versões de software e detalhes que auxiliam na exploração.",
       "name": "Hardcoded Keys (A Chave Debaixo do Tapete)",
       "technical_description": "Chaves e segredos embutidos no código-fonte, fáceis de extrair.",
       "when_it_occurs": [
